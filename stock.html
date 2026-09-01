@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Management | GreenLeaf Nursery</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #edf7ea, #f7fff6);
+            color: #214d2b;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .topbar {
+            background: #2e7d32;
+            color: white;
+            padding: 20px 28px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(21, 72, 30, 0.16);
+        }
+
+        .topbar h1 {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .topbar p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        nav {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        nav a:hover {
+            color: #d6f5d5;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 24px;
+            margin-top: 26px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 12px 22px rgba(34, 76, 42, 0.08);
+            padding: 24px;
+        }
+
+        .form-panel {
+            height: fit-content;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #1b5e20;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-weight: 600;
+            color: #2d4f36;
+        }
+
+        input, select, button {
+            border: 1px solid #cfe4d1;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 15px;
+        }
+
+        input:focus, select:focus {
+            outline: 2px solid #a5d6a7;
+            border-color: #66bb6a;
+        }
+
+        button {
+            background: #2e7d32;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        button:hover {
+            background: #1b5e20;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(120px, 1fr));
+            gap: 14px;
+            margin-top: 10px;
+        }
+
+        .stat-box {
+            background: #f1f8e9;
+            border-radius: 12px;
+            padding: 18px 14px;
+            border: 1px solid #dfeecf;
+        }
+
+        .stat-box span {
+            display: block;
+            font-size: 13px;
+            color: #476754;
+            margin-bottom: 8px;
+        }
+
+        .stat-box strong {
+            font-size: 30px;
+            color: #1b5e20;
+        }
+
+        .table-panel {
+            grid-column: 1 / -1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 14px 12px;
+            border-bottom: 1px solid #e8efe5;
+        }
+
+        th {
+            background: #f4faf2;
+            color: #234b2b;
+            font-size: 14px;
+        }
+
+        td {
+            color: #35573e;
+            font-size: 15px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .tag.low {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .mini-btn {
+            padding: 8px 10px;
+            font-size: 12px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .mini-btn.add {
+            background: #388e3c;
+        }
+
+        .mini-btn.remove {
+            background: #d32f2f;
+        }
+
+        .mini-btn.delete {
+            background: #757575;
+        }
+
+        @media (max-width: 860px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="topbar">
+            <div>
+                <h1>🌿 GreenLeaf Nursery</h1>
+                <p>Stock Management</p>
+            </div>
+            <nav>
+                <a href="sample.html">Home</a>
+                <a href="stock.html">Stock</a>
+                <a href="#">Orders</a>
+                <a href="#">Customers</a>
+            </nav>
+        </header>
+
+        <main class="dashboard">
+            <section class="panel form-panel">
+                <h2>Add Plant Stock</h2>
+
+                <form id="stockForm">
+                    <div class="input-group">
+                        <label for="plantName">Plant Name</label>
+                        <input id="plantName" name="plantName" type="text" placeholder="e.g. Rose" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="plantCategory">Category</label>
+                        <select id="plantCategory" name="plantCategory">
+                            <option value="Flower">Flower</option>
+                            <option value="Fruit">Fruit</option>
+                            <option value="Vegetable">Vegetable</option>
+                            <option value="Herb">Herb</option>
+                            <option value="Indoor">Indoor</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="plantQuantity">Quantity</label>
+                        <input id="plantQuantity" name="plantQuantity" type="number" min="1" value="10" required>
+                    </div>
+
+                    <button type="submit">Add to Stock</button>
+                </form>
+            </section>
+
+            <section class="panel">
+                <h2>Stock Overview</h2>
+                <div class="summary-grid">
+                    <div class="stat-box">
+                        <span>Total Plants</span>
+                        <strong id="totalPlants">0</strong>
+                    </div>
+                    <div class="stat-box">
+                        <span>Available Units</span>
+                        <strong id="totalUnits">0</strong>
+                    </div>
+                    <div class="stat-box">
+                        <span>Low Stock</span>
+                        <strong id="lowStock">0</strong>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel table-panel">
+                <h2>Current Stock</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Plant</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stockTableBody"></tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const initialStock = [
+            { id: 1, name: 'Rose', category: 'Flower', quantity: 18 },
+            { id: 2, name: 'Tomato', category: 'Vegetable', quantity: 12 },
+            { id: 3, name: 'Basil', category: 'Herb', quantity: 5 },
+            { id: 4, name: 'Palm', category: 'Indoor', quantity: 7 }
+        ];
+
+        let stock = JSON.parse(localStorage.getItem('greenleafStock')) || initialStock;
+
+        function saveStock() {
+            localStorage.setItem('greenleafStock', JSON.stringify(stock));
+        }
+
+        function updateSummary() {
+            const totalPlants = stock.length;
+            const totalUnits = stock.reduce((sum, item) => sum + item.quantity, 0);
+            const lowStock = stock.filter(item => item.quantity <= 5).length;
+
+            document.getElementById('totalPlants').textContent = totalPlants;
+            document.getElementById('totalUnits').textContent = totalUnits;
+            document.getElementById('lowStock').textContent = lowStock;
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('stockTableBody');
+            tbody.innerHTML = '';
+
+            stock.forEach(item => {
+                const row = document.createElement('tr');
+                const isLow = item.quantity <= 5;
+
+                row.innerHTML = `
+                    <td><strong>${item.name}</strong></td>
+                    <td>${item.category}</td>
+                    <td>${item.quantity}</td>
+                    <td><span class="tag ${isLow ? 'low' : ''}">${isLow ? 'Low Stock' : 'Available'}</span></td>
+                    <td>
+                        <div class="actions">
+                            <button type="button" class="mini-btn add" data-action="increase" data-id="${item.id}">+1</button>
+                            <button type="button" class="mini-btn remove" data-action="decrease" data-id="${item.id}">-1</button>
+                            <button type="button" class="mini-btn delete" data-action="delete" data-id="${item.id}">Delete</button>
+                        </div>
+                    </td>
+                `;
+
+                tbody.appendChild(row);
+            });
+
+            updateSummary();
+        }
+
+        document.getElementById('stockForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const name = document.getElementById('plantName').value.trim();
+            const category = document.getElementById('plantCategory').value;
+            const quantity = Number(document.getElementById('plantQuantity').value);
+
+            if (!name || quantity <= 0) {
+                return;
+            }
+
+            const existingPlant = stock.find(item => item.name.toLowerCase() === name.toLowerCase());
+
+            if (existingPlant) {
+                existingPlant.quantity += quantity;
+                existingPlant.category = category;
+            } else {
+                stock.push({
+                    id: Date.now(),
+                    name,
+                    category,
+                    quantity
+                });
+            }
+
+            saveStock();
+            renderTable();
+            document.getElementById('stockForm').reset();
+            document.getElementById('plantQuantity').value = 10;
+        });
+
+        document.getElementById('stockTableBody').addEventListener('click', function (event) {
+            const target = event.target.closest('button');
+            if (!target) return;
+
+            const action = target.dataset.action;
+            const id = Number(target.dataset.id);
+
+            const item = stock.find(entry => entry.id === id);
+            if (!item) return;
+
+            if (action === 'increase') {
+                item.quantity += 1;
+            }
+
+            if (action === 'decrease') {
+                item.quantity = Math.max(0, item.quantity - 1);
+            }
+
+            if (action === 'delete') {
+                stock = stock.filter(entry => entry.id !== id);
+            }
+
+            saveStock();
+            renderTable();
+        });
+
+        renderTable();
+    </script>
+</body>
+</html>
