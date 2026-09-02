@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nursery Management System</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                <span>♧</span>
+            </div>
+
+            <div class="brand-text">
+                <h2>NURSERY</h2>
+                <p>MANAGEMENT SYSTEM</p>
+            </div>
+
+        </div>
+
+
+        <!-- Navigation -->
+
+        <nav class="nav">
+
+            <button class="nav-item active" data-page="dashboard">
+                <span class="nav-icon">▦</span>
+                <span>Dashboard</span>
+            </button>
+
+            <button class="nav-item" data-page="plants">
+                <span class="nav-icon">♧</span>
+                <span>Plant Management</span>
+            </button>
+
+            <button class="nav-item" data-page="stock">
+                <span class="nav-icon">◇</span>
+                <span>Stock Management</span>
+            </button>
+
+            <button class="nav-item" data-page="customers">
+                <span class="nav-icon">♧</span>
+                <span>Customer Management</span>
+            </button>
+
+            <button class="nav-item" data-page="orders">
+                <span class="nav-icon">🛒</span>
+                <span>Order Management</span>
+            </button>
+
+            <button class="nav-item" data-page="payments">
+                <span class="nav-icon">₹</span>
+                <span>Payment Management</span>
+            </button>
+
+            <button class="nav-item" data-page="users">
+                <span class="nav-icon">♙</span>
+                <span>User Management</span>
+            </button>
+
+        </nav>
+
+
+        <!-- Sidebar User -->
+
+        <div class="sidebar-profile">
+
+            <div class="profile-avatar">
+                V
+                <span class="online-dot"></span>
+            </div>
+
+            <div class="profile-details">
+                <strong>Varshini</strong>
+                <span>Authorized User</span>
+            </div>
+
+            <span class="profile-arrow">⌄</span>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main-content">
+
+        <!-- Header -->
+
+        <header class="header">
+
+            <div class="header-left">
+
+                <button class="mobile-menu" id="mobileMenu">
+                    ☰
+                </button>
+
+                <div>
+                    <span class="header-caption">
+                        NURSERY MANAGEMENT SYSTEM
+                    </span>
+
+                    <h3 id="pageTitle">Dashboard</h3>
+                </div>
+
+            </div>
+
+
+            <div class="header-right">
+
+                <div class="header-profile">
+
+                    <div class="header-avatar">
+                        V
+                    </div>
+
+                    <div>
+                        <strong>Varshini</strong>
+                        <span>Authorized User</span>
+                    </div>
+
+                    <span class="down-arrow">⌄</span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ==================================================
+             DASHBOARD
+        =================================================== -->
+
+        <section class="page active" id="dashboard">
+
+            <!-- Hero -->
+
+            <div class="hero">
+
+                <video
+                    class="hero-video"
+                    autoplay
+                    muted
+                    loop
+                    playsinline>
+
+                    <source src="assets/nursery.mp4" type="video/mp4">
+
+                </video>
+
+                <div class="hero-overlay"></div>
+
+
+                <div class="hero-content">
+
+                    <span class="hero-small">
+                        WELCOME BACK,
+                    </span>
+
+                    <h1>Varshini</h1>
+
+                    <p>
+                        Manage plants, stock, customers,
+                        orders and payments from one place.
+                    </p>
+
+                </div>
+
+
+                <div class="hero-decoration">
+                    🌿
+                </div>
+
+            </div>
+
+
+            <!-- Summary -->
+
+            <div class="summary-grid">
+
+                <div class="summary-card">
+
+                    <div class="summary-icon green">
+                        🌱
+                    </div>
+
+                    <div class="summary-info">
+                        <span>Total Plants</span>
+                        <strong>12</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon gold">
+                        ◇
+                    </div>
+
+                    <div class="summary-info">
+                        <span>Available Stock</span>
+                        <strong>248</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon blue">
+                        ♧
+                    </div>
+
+                    <div class="summary-info">
+                        <span>Total Customers</span>
+                        <strong>36</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon orange">
+                        🛒
+                    </div>
+
+                    <div class="summary-info">
+                        <span>Total Orders</span>
+                        <strong>24</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Modules -->
+
+            <div class="section-heading">
+
+                <div>
+                    <span>MANAGEMENT</span>
+
+                    <h2>System Modules</h2>
+
+                    <p>
+                        Select a module to manage the nursery system.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="module-grid">
+
+
+                <div class="module-card" data-page="plants">
+
+                    <div class="module-top">
+
+                        <div class="module-icon green">
+                            🌱
+                        </div>
+
+                        <span class="module-number">
+                            01
+                        </span>
+
+                    </div>
+
+                    <h3>Plant Management</h3>
+
+                    <p>
+                        Add, update and remove plant details and prices.
+                    </p>
+
+                    <button class="manage-btn">
+                        Manage
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+
+                <div class="module-card" data-page="stock">
+
+                    <div class="module-top">
+
+                        <div class="module-icon green">
+                            ◇
+                        </div>
+
+                        <span class="module-number">
+                            02
+                        </span>
+
+                    </div>
+
+                    <h3>Stock Management</h3>
+
+                    <p>
+                        Track available plants and update stock quantities.
+                    </p>
+
+                    <button class="manage-btn">
+                        Manage
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+
+                <div class="module-card" data-page="customers">
+
+                    <div class="module-top">
+
+                        <div class="module-icon blue">
+                            ♧
+                        </div>
+
+                        <span class="module-number">
+                            03
+                        </span>
+
+                    </div>
+
+                    <h3>Customer Management</h3>
+
+                    <p>
+                        Store and manage customer details and contact information.
+                    </p>
+
+                    <button class="manage-btn">
+                        Manage
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+
+                <div class="module-card" data-page="orders">
+
+                    <div class="module-top">
+
+                        <div class="module-icon orange">
+                            🛒
+                        </div>
+
+                        <span class="module-number">
+                            04
+                        </span>
+
+                    </div>
+
+                    <h3>Order Management</h3>
+
+                    <p>
+                        Create, view and update customer orders.
+                    </p>
+
+                    <button class="manage-btn">
+                        Manage
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+
+                <div class="module-card" data-page="payments">
+
+                    <div class="module-top">
+
+                        <div class="module-icon gold">
+                            ₹
+                        </div>
+
+                        <span class="module-number">
+                            05
+                        </span>
+
+                    </div>
+
+                    <h3>Payment Management</h3>
+
+                    <p>
+                        Record payment details and payment status.
+                    </p>
+
+                    <button class="manage-btn">
+                        Manage
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+
+                <div class="module-card" data-page="users">
+
+                    <div class="module-top">
+
+                        <div class="module-icon purple">
+                            ♙
+                        </div>
+
+                        <span class="module-number">
+                            06
+                        </span>
+
+                    </div>
+
+                    <h3>User Management</h3>
+
+                    <p>
+                        Allow Varshini and Sri to manage the nursery system.
+                    </p>
+
+                    <button class="manage-btn">
+                        Manage
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- Stock Table -->
+
+            <div class="data-card">
+
+                <div class="data-header">
+
+                    <div>
+
+                        <span>STOCK MANAGEMENT</span>
+
+                        <h2>Available Plant Stock</h2>
+
+                        <p>
+                            Current plant availability and prices.
+                        </p>
+
+                    </div>
+
+                    <button class="view-button" data-page="stock">
+                        View Stock
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>PLANT NAME</th>
+                                <th>PRICE</th>
+                                <th>AVAILABLE QUANTITY</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+
+                                <td>
+                                    <div class="plant-cell">
+                                        <div class="plant-image rose">🌹</div>
+                                        <strong>Rose Plant</strong>
+                                    </div>
+                                </td>
+
+                                <td>₹120</td>
+
+                                <td>
+                                    <span class="stock-number">45</span>
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    <div class="plant-cell">
+                                        <div class="plant-image aloe">🌿</div>
+                                        <strong>Aloe Vera</strong>
+                                    </div>
+                                </td>
+
+                                <td>₹80</td>
+
+                                <td>
+                                    <span class="stock-number">62</span>
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    <div class="plant-cell">
+                                        <div class="plant-image jasmine">🌼</div>
+                                        <strong>Jasmine Plant</strong>
+                                    </div>
+                                </td>
+
+                                <td>₹100</td>
+
+                                <td>
+                                    <span class="stock-number">38</span>
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    <div class="plant-cell">
+                                        <div class="plant-image money">🪴</div>
+                                        <strong>Money Plant</strong>
+                                    </div>
+                                </td>
+
+                                <td>₹90</td>
+
+                                <td>
+                                    <span class="stock-number">55</span>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             PLANT MANAGEMENT
+        =================================================== -->
+
+        <section class="page" id="plants">
+
+            <div class="page-header">
+
+                <div>
+                    <span>MODULE 01</span>
+                    <h1>Plant Management</h1>
+                    <p>
+                        Add, update and remove plant details and prices.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="module-placeholder">
+
+                <div class="placeholder-icon">
+                    🌱
+                </div>
+
+                <h2>Plant Management</h2>
+
+                <p>
+                    Plant details and price management section.
+                </p>
+
+                <div class="placeholder-table">
+
+                    <div>
+                        <strong>Rose Plant</strong>
+                        <span>₹120</span>
+                    </div>
+
+                    <div>
+                        <strong>Aloe Vera</strong>
+                        <span>₹80</span>
+                    </div>
+
+                    <div>
+                        <strong>Jasmine Plant</strong>
+                        <span>₹100</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             STOCK MANAGEMENT
+        =================================================== -->
+
+        <section class="page" id="stock">
+
+            <div class="page-header">
+
+                <div>
+                    <span>MODULE 02</span>
+                    <h1>Stock Management</h1>
+                    <p>
+                        Track available plants and update stock quantities.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="module-placeholder">
+
+                <div class="placeholder-icon">
+                    ◇
+                </div>
+
+                <h2>Available Plant Stock</h2>
+
+                <p>
+                    Stock quantity information.
+                </p>
+
+                <div class="placeholder-table">
+
+                    <div>
+                        <strong>Rose Plant</strong>
+                        <span>45</span>
+                    </div>
+
+                    <div>
+                        <strong>Aloe Vera</strong>
+                        <span>62</span>
+                    </div>
+
+                    <div>
+                        <strong>Jasmine Plant</strong>
+                        <span>38</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             CUSTOMER MANAGEMENT
+        =================================================== -->
+
+        <section class="page" id="customers">
+
+            <div class="page-header">
+
+                <div>
+                    <span>MODULE 03</span>
+                    <h1>Customer Management</h1>
+                    <p>
+                        Store and manage customer details and contact information.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="module-placeholder">
+
+                <div class="placeholder-icon">
+                    ♧
+                </div>
+
+                <h2>Customer Details</h2>
+
+                <p>
+                    Customer details and contact information.
+                </p>
+
+                <div class="placeholder-table">
+
+                    <div>
+                        <strong>Anu</strong>
+                        <span>9876543210</span>
+                    </div>
+
+                    <div>
+                        <strong>Priya</strong>
+                        <span>9876501234</span>
+                    </div>
+
+                    <div>
+                        <strong>Rahul</strong>
+                        <span>9876512345</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             ORDER MANAGEMENT
+        =================================================== -->
+
+        <section class="page" id="orders">
+
+            <div class="page-header">
+
+                <div>
+                    <span>MODULE 04</span>
+                    <h1>Order Management</h1>
+                    <p>
+                        Create, view and update customer orders.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="module-placeholder">
+
+                <div class="placeholder-icon">
+                    🛒
+                </div>
+
+                <h2>Customer Orders</h2>
+
+                <p>
+                    Customer order information.
+                </p>
+
+                <div class="placeholder-table">
+
+                    <div>
+                        <strong>#ORD001</strong>
+                        <span>Anu</span>
+                    </div>
+
+                    <div>
+                        <strong>#ORD002</strong>
+                        <span>Priya</span>
+                    </div>
+
+                    <div>
+                        <strong>#ORD003</strong>
+                        <span>Rahul</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             PAYMENT MANAGEMENT
+        =================================================== -->
+
+        <section class="page" id="payments">
+
+            <div class="page-header">
+
+                <div>
+                    <span>MODULE 05</span>
+                    <h1>Payment Management</h1>
+                    <p>
+                        Record payment details and payment status.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="module-placeholder">
+
+                <div class="placeholder-icon">
+                    ₹
+                </div>
+
+                <h2>Payment Details</h2>
+
+                <p>
+                    Payment details and payment status.
+                </p>
+
+                <div class="placeholder-table">
+
+                    <div>
+                        <strong>#ORD001</strong>
+                        <span>Paid</span>
+                    </div>
+
+                    <div>
+                        <strong>#ORD002</strong>
+                        <span>Pending</span>
+                    </div>
+
+                    <div>
+                        <strong>#ORD003</strong>
+                        <span>Paid</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             USER MANAGEMENT
+        =================================================== -->
+
+        <section class="page" id="users">
+
+            <div class="page-header">
+
+                <div>
+                    <span>MODULE 06</span>
+                    <h1>User Management</h1>
+                    <p>
+                        Login access for Varshini and Sri.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="users-container">
+
+                <div class="system-user">
+
+                    <div class="system-avatar">
+                        V
+                    </div>
+
+                    <div>
+                        <h2>Varshini</h2>
+                        <p>Authorized User</p>
+                    </div>
+
+                    <span class="authorized">
+                        Authorized
+                    </span>
+
+                </div>
+
+
+                <div class="system-user">
+
+                    <div class="system-avatar">
+                        S
+                    </div>
+
+                    <div>
+                        <h2>Sri</h2>
+                        <p>Authorized User</p>
+                    </div>
+
+                    <span class="authorized">
+                        Authorized
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
