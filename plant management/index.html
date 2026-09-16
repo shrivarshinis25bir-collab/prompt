@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Nursery Management System</title>
+    <meta name="description" content="A comprehensive nursery management system for managing plants, stock, customers, orders, payments, and authorized users.">
+    <meta property="og:title" content="Nursery Management System">
+    <meta property="og:description" content="A comprehensive nursery management system for managing plants, stock, customers, orders, payments, and authorized users.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -127,7 +130,12 @@
             </div>
 
 
-            <div class="header-right">
+            <div class="header-right" style="display: flex; align-items: center; gap: 15px;">
+
+                <div class="db-badge" id="dbStatusBadge" title="Supabase PostgreSQL">
+                    <span class="dot"></span>
+                    <span id="dbStatusText">Supabase PostgreSQL Connected</span>
+                </div>
 
                 <div class="header-profile">
 
@@ -200,7 +208,7 @@
 
             <div class="summary-grid">
 
-                <div class="summary-card">
+                <div class="summary-card" data-page="plants" style="cursor: pointer;">
 
                     <div class="summary-icon green">
                         🌱
@@ -208,13 +216,13 @@
 
                     <div class="summary-info">
                         <span>Total Plants</span>
-                        <strong>12</strong>
+                        <strong id="statTotalPlants">4</strong>
                     </div>
 
                 </div>
 
 
-                <div class="summary-card">
+                <div class="summary-card" data-page="stock" style="cursor: pointer;">
 
                     <div class="summary-icon gold">
                         ◇
@@ -222,13 +230,13 @@
 
                     <div class="summary-info">
                         <span>Available Stock</span>
-                        <strong>248</strong>
+                        <strong id="statAvailableStock">200</strong>
                     </div>
 
                 </div>
 
 
-                <div class="summary-card">
+                <div class="summary-card" data-page="customers" style="cursor: pointer;">
 
                     <div class="summary-icon blue">
                         ♧
@@ -236,13 +244,13 @@
 
                     <div class="summary-info">
                         <span>Total Customers</span>
-                        <strong>36</strong>
+                        <strong id="statTotalCustomers">3</strong>
                     </div>
 
                 </div>
 
 
-                <div class="summary-card">
+                <div class="summary-card" data-page="orders" style="cursor: pointer;">
 
                     <div class="summary-icon orange">
                         🛒
@@ -250,7 +258,7 @@
 
                     <div class="summary-info">
                         <span>Total Orders</span>
-                        <strong>24</strong>
+                        <strong id="statTotalOrders">3</strong>
                     </div>
 
                 </div>
@@ -488,77 +496,58 @@
 
                         </thead>
 
-                        <tbody>
+                        <tbody id="dashboardStockBody">
 
                             <tr>
-
                                 <td>
                                     <div class="plant-cell">
                                         <div class="plant-image rose">🌹</div>
                                         <strong>Rose Plant</strong>
                                     </div>
                                 </td>
-
                                 <td>₹120</td>
-
                                 <td>
                                     <span class="stock-number">45</span>
                                 </td>
-
                             </tr>
 
-
                             <tr>
-
                                 <td>
                                     <div class="plant-cell">
                                         <div class="plant-image aloe">🌿</div>
                                         <strong>Aloe Vera</strong>
                                     </div>
                                 </td>
-
                                 <td>₹80</td>
-
                                 <td>
                                     <span class="stock-number">62</span>
                                 </td>
-
                             </tr>
 
-
                             <tr>
-
                                 <td>
                                     <div class="plant-cell">
                                         <div class="plant-image jasmine">🌼</div>
                                         <strong>Jasmine Plant</strong>
                                     </div>
                                 </td>
-
                                 <td>₹100</td>
-
                                 <td>
                                     <span class="stock-number">38</span>
                                 </td>
-
                             </tr>
 
-
                             <tr>
-
                                 <td>
                                     <div class="plant-cell">
                                         <div class="plant-image money">🪴</div>
                                         <strong>Money Plant</strong>
                                     </div>
                                 </td>
-
                                 <td>₹90</td>
-
                                 <td>
                                     <span class="stock-number">55</span>
                                 </td>
-
                             </tr>
 
                         </tbody>
@@ -573,7 +562,7 @@
 
 
         <!-- ==================================================
-             PLANT MANAGEMENT
+             1. PLANT MANAGEMENT
         =================================================== -->
 
         <section class="page" id="plants">
@@ -590,35 +579,41 @@
 
             </div>
 
+            <div class="data-card">
 
-            <div class="module-placeholder">
+                <div class="data-header">
 
-                <div class="placeholder-icon">
-                    🌱
+                    <div>
+                        <span>PLANTS INVENTORY</span>
+                        <h2>All Nursery Plants</h2>
+                        <p>Manage plant varieties, unit prices, and catalog items.</p>
+                    </div>
+
+                    <button class="btn-primary" id="openAddPlantBtn">
+                        <span>+</span> Add New Plant
+                    </button>
+
                 </div>
 
-                <h2>Plant Management</h2>
+                <div class="table-wrapper">
 
-                <p>
-                    Plant details and price management section.
-                </p>
+                    <table>
 
-                <div class="placeholder-table">
+                        <thead>
+                            <tr>
+                                <th>PLANT NAME</th>
+                                <th>CATEGORY</th>
+                                <th>UNIT PRICE</th>
+                                <th>CURRENT STOCK</th>
+                                <th>ACTIONS</th>
+                            </tr>
+                        </thead>
 
-                    <div>
-                        <strong>Rose Plant</strong>
-                        <span>₹120</span>
-                    </div>
+                        <tbody id="plantsTableBody">
+                            <!-- Populated dynamically via API -->
+                        </tbody>
 
-                    <div>
-                        <strong>Aloe Vera</strong>
-                        <span>₹80</span>
-                    </div>
-
-                    <div>
-                        <strong>Jasmine Plant</strong>
-                        <span>₹100</span>
-                    </div>
+                    </table>
 
                 </div>
 
@@ -628,7 +623,7 @@
 
 
         <!-- ==================================================
-             STOCK MANAGEMENT
+             2. STOCK MANAGEMENT
         =================================================== -->
 
         <section class="page" id="stock">
@@ -645,35 +640,41 @@
 
             </div>
 
+            <div class="data-card">
 
-            <div class="module-placeholder">
+                <div class="data-header">
 
-                <div class="placeholder-icon">
-                    ◇
+                    <div>
+                        <span>REAL-TIME INVENTORY</span>
+                        <h2>Available Plant Stock</h2>
+                        <p>Monitor availability, threshold levels, and adjust stock counts.</p>
+                    </div>
+
+                    <button class="btn-secondary" id="refreshStockBtn">
+                        🔄 Refresh Stock
+                    </button>
+
                 </div>
 
-                <h2>Available Plant Stock</h2>
+                <div class="table-wrapper">
 
-                <p>
-                    Stock quantity information.
-                </p>
+                    <table>
 
-                <div class="placeholder-table">
+                        <thead>
+                            <tr>
+                                <th>PLANT</th>
+                                <th>CATEGORY</th>
+                                <th>AVAILABLE QUANTITY</th>
+                                <th>STATUS</th>
+                                <th>QUICK ADJUST</th>
+                            </tr>
+                        </thead>
 
-                    <div>
-                        <strong>Rose Plant</strong>
-                        <span>45</span>
-                    </div>
+                        <tbody id="stockTableBody">
+                            <!-- Populated dynamically via API -->
+                        </tbody>
 
-                    <div>
-                        <strong>Aloe Vera</strong>
-                        <span>62</span>
-                    </div>
-
-                    <div>
-                        <strong>Jasmine Plant</strong>
-                        <span>38</span>
-                    </div>
+                    </table>
 
                 </div>
 
@@ -683,7 +684,7 @@
 
 
         <!-- ==================================================
-             CUSTOMER MANAGEMENT
+             3. CUSTOMER MANAGEMENT
         =================================================== -->
 
         <section class="page" id="customers">
@@ -700,35 +701,41 @@
 
             </div>
 
+            <div class="data-card">
 
-            <div class="module-placeholder">
+                <div class="data-header">
 
-                <div class="placeholder-icon">
-                    ♧
+                    <div>
+                        <span>CUSTOMER DIRECTORY</span>
+                        <h2>Registered Customers</h2>
+                        <p>Maintain contact records for nursery patrons and order fulfillment.</p>
+                    </div>
+
+                    <button class="btn-primary" id="openAddCustomerBtn">
+                        <span>+</span> Add Customer
+                    </button>
+
                 </div>
 
-                <h2>Customer Details</h2>
+                <div class="table-wrapper">
 
-                <p>
-                    Customer details and contact information.
-                </p>
+                    <table>
 
-                <div class="placeholder-table">
+                        <thead>
+                            <tr>
+                                <th>CUSTOMER NAME</th>
+                                <th>CONTACT PHONE</th>
+                                <th>EMAIL</th>
+                                <th>REGISTERED DATE</th>
+                                <th>ACTIONS</th>
+                            </tr>
+                        </thead>
 
-                    <div>
-                        <strong>Anu</strong>
-                        <span>9876543210</span>
-                    </div>
+                        <tbody id="customersTableBody">
+                            <!-- Populated dynamically via API -->
+                        </tbody>
 
-                    <div>
-                        <strong>Priya</strong>
-                        <span>9876501234</span>
-                    </div>
-
-                    <div>
-                        <strong>Rahul</strong>
-                        <span>9876512345</span>
-                    </div>
+                    </table>
 
                 </div>
 
@@ -738,7 +745,7 @@
 
 
         <!-- ==================================================
-             ORDER MANAGEMENT
+             4. ORDER MANAGEMENT
         =================================================== -->
 
         <section class="page" id="orders">
@@ -755,35 +762,42 @@
 
             </div>
 
+            <div class="data-card">
 
-            <div class="module-placeholder">
+                <div class="data-header">
 
-                <div class="placeholder-icon">
-                    🛒
+                    <div>
+                        <span>SALES & ORDERS</span>
+                        <h2>Customer Orders</h2>
+                        <p>Track plant purchases, order quantities, totals, and fulfillment status.</p>
+                    </div>
+
+                    <button class="btn-primary" id="openCreateOrderBtn">
+                        <span>+</span> Create Order
+                    </button>
+
                 </div>
 
-                <h2>Customer Orders</h2>
+                <div class="table-wrapper">
 
-                <p>
-                    Customer order information.
-                </p>
+                    <table>
 
-                <div class="placeholder-table">
+                        <thead>
+                            <tr>
+                                <th>ORDER #</th>
+                                <th>CUSTOMER</th>
+                                <th>PLANT & QUANTITY</th>
+                                <th>TOTAL AMOUNT</th>
+                                <th>ORDER STATUS</th>
+                                <th>ACTIONS</th>
+                            </tr>
+                        </thead>
 
-                    <div>
-                        <strong>#ORD001</strong>
-                        <span>Anu</span>
-                    </div>
+                        <tbody id="ordersTableBody">
+                            <!-- Populated dynamically via API -->
+                        </tbody>
 
-                    <div>
-                        <strong>#ORD002</strong>
-                        <span>Priya</span>
-                    </div>
-
-                    <div>
-                        <strong>#ORD003</strong>
-                        <span>Rahul</span>
-                    </div>
+                    </table>
 
                 </div>
 
@@ -793,7 +807,7 @@
 
 
         <!-- ==================================================
-             PAYMENT MANAGEMENT
+             5. PAYMENT MANAGEMENT
         =================================================== -->
 
         <section class="page" id="payments">
@@ -810,35 +824,43 @@
 
             </div>
 
+            <div class="data-card">
 
-            <div class="module-placeholder">
+                <div class="data-header">
 
-                <div class="placeholder-icon">
-                    ₹
+                    <div>
+                        <span>PAYMENT RECORDS</span>
+                        <h2>Customer Payments</h2>
+                        <p>Track payments, amounts, settlement status (Paid/Pending), and methods.</p>
+                    </div>
+
+                    <button class="btn-primary" id="openRecordPaymentBtn">
+                        <span>+</span> Record Payment
+                    </button>
+
                 </div>
 
-                <h2>Payment Details</h2>
+                <div class="table-wrapper">
 
-                <p>
-                    Payment details and payment status.
-                </p>
+                    <table>
 
-                <div class="placeholder-table">
+                        <thead>
+                            <tr>
+                                <th>PAYMENT ID</th>
+                                <th>ORDER REFERENCE</th>
+                                <th>CUSTOMER</th>
+                                <th>AMOUNT</th>
+                                <th>STATUS</th>
+                                <th>METHOD</th>
+                                <th>ACTIONS</th>
+                            </tr>
+                        </thead>
 
-                    <div>
-                        <strong>#ORD001</strong>
-                        <span>Paid</span>
-                    </div>
+                        <tbody id="paymentsTableBody">
+                            <!-- Populated dynamically via API -->
+                        </tbody>
 
-                    <div>
-                        <strong>#ORD002</strong>
-                        <span>Pending</span>
-                    </div>
-
-                    <div>
-                        <strong>#ORD003</strong>
-                        <span>Paid</span>
-                    </div>
+                    </table>
 
                 </div>
 
@@ -848,7 +870,7 @@
 
 
         <!-- ==================================================
-             USER MANAGEMENT
+             6. USER MANAGEMENT
         =================================================== -->
 
         <section class="page" id="users">
@@ -865,10 +887,9 @@
 
             </div>
 
+            <div class="users-container" id="usersListContainer">
 
-            <div class="users-container">
-
-                <div class="system-user">
+                <div class="system-user active-user-card" id="userCardVarshini" data-username="Varshini">
 
                     <div class="system-avatar">
                         V
@@ -876,17 +897,17 @@
 
                     <div>
                         <h2>Varshini</h2>
-                        <p>Authorized User</p>
+                        <p>Authorized User (Administrator)</p>
                     </div>
 
-                    <span class="authorized">
-                        Authorized
+                    <span class="authorized" id="badgeVarshini">
+                        ● Active User
                     </span>
 
                 </div>
 
 
-                <div class="system-user">
+                <div class="system-user" id="userCardSri" data-username="Sri">
 
                     <div class="system-avatar">
                         S
@@ -894,15 +915,28 @@
 
                     <div>
                         <h2>Sri</h2>
-                        <p>Authorized User</p>
+                        <p>Authorized User (Administrator)</p>
                     </div>
 
-                    <span class="authorized">
+                    <span class="authorized" id="badgeSri">
                         Authorized
                     </span>
 
                 </div>
 
+            </div>
+
+            <div class="data-card" style="margin-top: 24px;">
+                <div class="data-header">
+                    <div>
+                        <span>SYSTEM ACCESS POLICY</span>
+                        <h2>Access Control & Security</h2>
+                        <p>SRS Rule FR-06: Exclusive login and management rights for Varshini and Sri.</p>
+                    </div>
+                </div>
+                <p style="font-size: 11px; color: var(--muted); line-height: 1.6;">
+                    Only authorized users (Varshini &amp; Sri) are permitted to perform plant catalog edits, stock reconciliations, order dispatches, and payment confirmations. Click either user above to switch the active operator profile.
+                </p>
             </div>
 
         </section>
@@ -911,6 +945,210 @@
 
 </div>
 
+<!-- ==================================================
+     MODALS & DIALOGS
+=================================================== -->
+
+<!-- Plant Modal (Add & Edit) -->
+<div class="modal-overlay" id="plantModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="plantModalTitle">Add New Plant</h3>
+            <button class="modal-close" onclick="closeModal('plantModal')">&times;</button>
+        </div>
+        <form id="plantForm">
+            <input type="hidden" id="plantId">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="plantInputName">PLANT NAME *</label>
+                    <input type="text" id="plantInputName" class="form-control" placeholder="e.g. Marigold Plant" required>
+                </div>
+                <div class="form-group">
+                    <label for="plantInputCategory">CATEGORY</label>
+                    <select id="plantInputCategory" class="form-control">
+                        <option value="Flower">Flower</option>
+                        <option value="Herb">Herb</option>
+                        <option value="Indoor">Indoor</option>
+                        <option value="Fruit">Fruit</option>
+                        <option value="Vegetable">Vegetable</option>
+                        <option value="Ornamental">Ornamental</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="plantInputPrice">PRICE (₹) *</label>
+                    <input type="number" id="plantInputPrice" class="form-control" step="0.01" min="0" placeholder="e.g. 150.00" required>
+                </div>
+                <div class="form-group">
+                    <label for="plantInputQuantity">INITIAL STOCK QUANTITY</label>
+                    <input type="number" id="plantInputQuantity" class="form-control" min="0" placeholder="e.g. 30" value="10">
+                </div>
+                <div class="form-group">
+                    <label for="plantInputIcon">PLANT ICON</label>
+                    <select id="plantInputIcon" class="form-control">
+                        <option value="🌱">🌱 Sprout</option>
+                        <option value="🌹">🌹 Rose</option>
+                        <option value="🌿">🌿 Herb / Foliage</option>
+                        <option value="🌼">🌼 Blossom / Jasmine</option>
+                        <option value="🪴">🪴 Potted / Money Plant</option>
+                        <option value="🌻">🌻 Sunflower</option>
+                        <option value="🌸">🌸 Cherry Blossom</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeModal('plantModal')">Cancel</button>
+                <button type="submit" class="btn-primary" id="savePlantSubmitBtn">Save Plant</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Stock Adjustment Modal -->
+<div class="modal-overlay" id="stockModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>Update Plant Stock</h3>
+            <button class="modal-close" onclick="closeModal('stockModal')">&times;</button>
+        </div>
+        <form id="stockForm">
+            <input type="hidden" id="stockPlantId">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>PLANT NAME</label>
+                    <input type="text" id="stockPlantNameDisplay" class="form-control" readonly style="background: #f1f4f2;">
+                </div>
+                <div class="form-group">
+                    <label for="stockNewQuantity">EXACT STOCK QUANTITY *</label>
+                    <input type="number" id="stockNewQuantity" class="form-control" min="0" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeModal('stockModal')">Cancel</button>
+                <button type="submit" class="btn-primary">Update Stock</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Customer Modal (Add & Edit) -->
+<div class="modal-overlay" id="customerModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="customerModalTitle">Add Customer</h3>
+            <button class="modal-close" onclick="closeModal('customerModal')">&times;</button>
+        </div>
+        <form id="customerForm">
+            <input type="hidden" id="customerId">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="customerInputName">CUSTOMER NAME *</label>
+                    <input type="text" id="customerInputName" class="form-control" placeholder="e.g. Meera" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerInputPhone">PHONE NUMBER *</label>
+                    <input type="text" id="customerInputPhone" class="form-control" placeholder="e.g. 9876543210" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerInputEmail">EMAIL (OPTIONAL)</label>
+                    <input type="email" id="customerInputEmail" class="form-control" placeholder="e.g. meera@example.com">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeModal('customerModal')">Cancel</button>
+                <button type="submit" class="btn-primary">Save Customer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Order Modal -->
+<div class="modal-overlay" id="orderModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>Create Customer Order</h3>
+            <button class="modal-close" onclick="closeModal('orderModal')">&times;</button>
+        </div>
+        <form id="orderForm">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="orderCustomerSelect">SELECT CUSTOMER *</label>
+                    <select id="orderCustomerSelect" class="form-control" required>
+                        <!-- Populated from customers -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="orderPlantSelect">SELECT PLANT *</label>
+                    <select id="orderPlantSelect" class="form-control" required>
+                        <!-- Populated from plants -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="orderQuantityInput">ORDER QUANTITY *</label>
+                    <input type="number" id="orderQuantityInput" class="form-control" min="1" value="1" required>
+                </div>
+                <div class="form-group">
+                    <label>ESTIMATED TOTAL</label>
+                    <input type="text" id="orderTotalPreview" class="form-control" readonly value="₹0.00" style="background: #f1f4f2; font-weight: bold; color: var(--forest);">
+                </div>
+                <div class="form-group">
+                    <label for="orderPaymentStatusSelect">INITIAL PAYMENT STATUS</label>
+                    <select id="orderPaymentStatusSelect" class="form-control">
+                        <option value="Paid">Paid</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeModal('orderModal')">Cancel</button>
+                <button type="submit" class="btn-primary">Place Order</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Payment Record Modal -->
+<div class="modal-overlay" id="paymentModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>Record Payment</h3>
+            <button class="modal-close" onclick="closeModal('paymentModal')">&times;</button>
+        </div>
+        <form id="paymentForm">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="paymentOrderSelect">SELECT ORDER *</label>
+                    <select id="paymentOrderSelect" class="form-control" required>
+                        <!-- Populated from orders -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="paymentAmountInput">PAYMENT AMOUNT (₹) *</label>
+                    <input type="number" id="paymentAmountInput" class="form-control" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="paymentStatusSelect">PAYMENT STATUS</label>
+                    <select id="paymentStatusSelect" class="form-control">
+                        <option value="Paid">Paid</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="paymentMethodSelect">PAYMENT METHOD</label>
+                    <select id="paymentMethodSelect" class="form-control">
+                        <option value="Cash">Cash</option>
+                        <option value="UPI">UPI</option>
+                        <option value="Card">Card</option>
+                        <option value="Bank Transfer">Bank Transfer</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeModal('paymentModal')">Cancel</button>
+                <button type="submit" class="btn-primary">Record Payment</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 <script src="script.js"></script>
 

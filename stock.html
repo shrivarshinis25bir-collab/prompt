@@ -318,22 +318,48 @@
 
     <script>
         const initialStock = [
-            { id: 1, name: 'Rose', category: 'Flower', quantity: 18 },
-            { id: 2, name: 'Tomato', category: 'Vegetable', quantity: 12 },
-            { id: 3, name: 'Basil', category: 'Herb', quantity: 5 },
-            { id: 4, name: 'Palm', category: 'Indoor', quantity: 7 }
+            { id: 1, name: 'Rose', category: 'Flower', quantity: 45, price: 120 },
+            { id: 2, name: 'Aloe Vera', category: 'Herb', quantity: 62, price: 80 },
+            { id: 3, name: 'Jasmine', category: 'Flower', quantity: 38, price: 100 },
+            { id: 4, name: 'Money Plant', category: 'Indoor', quantity: 55, price: 90 }
         ];
 
-        let stock = JSON.parse(localStorage.getItem('greenleafStock')) || initialStock;
+        let stock = [];
 
-        function saveStock() {
+        async function loadStockFromAPI() {
+            try {
+                const res = await fetch('/api/stock');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Array.isArray(data) && data.length > 0) {
+                        stock = data.map(item => ({
+                            id: item.id,
+                            name: item.name,
+                            category: item.category || 'General',
+                            quantity: item.quantity,
+                            price: item.price
+                        }));
+                        renderTable();
+                        return;
+                    }
+                }
+            } catch (err) {
+                console.warn('API fetch failed, falling back to cached stock:', err);
+            }
+
+            // Fallback to local storage or defaults
+            stock = JSON.parse(localStorage.getItem('greenleafStock')) || initialStock;
+            renderTable();
+        }
+
+        function saveStockLocally() {
             localStorage.setItem('greenleafStock', JSON.stringify(stock));
         }
 
         function updateSummary() {
             const totalPlants = stock.length;
-            const totalUnits = stock.reduce((sum, item) => sum + item.quantity, 0);
-            const lowStock = stock.filter(item => item.quantity <= 5).length;
+            const totalUnits = stock.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
+            const lowStock = stock.filter(item => Number(item.quantity) <= 10).length;
 
             document.getElementById('totalPlants').textContent = totalPlants;
             document.getElementById('totalUnits').textContent = totalUnits;
@@ -346,12 +372,13 @@
 
             stock.forEach(item => {
                 const row = document.createElement('tr');
-                const isLow = item.quantity <= 5;
+                const qty = Number(item.quantity) || 0;
+                const isLow = qty <= 10;
 
                 row.innerHTML = `
                     <td><strong>${item.name}</strong></td>
                     <td>${item.category}</td>
-                    <td>${item.quantity}</td>
+                    <td>${qty}</td>
                     <td><span class="tag ${isLow ? 'low' : ''}">${isLow ? 'Low Stock' : 'Available'}</span></td>
                     <td>
                         <div class="actions">
@@ -368,19 +395,41 @@
             updateSummary();
         }
 
-        document.getElementById('stockForm').addEventListener('submit', function (event) {
+        document.getElementById('stockForm').addEventListener('submit', async function (event) {
             event.preventDefault();
 
             const name = document.getElementById('plantName').value.trim();
             const category = document.getElementById('plantCategory').value;
             const quantity = Number(document.getElementById('plantQuantity').value);
 
-            if (!name || quantity <= 0) {
-                return;
+            if (!name || quantity < 0) return;
+
+            // Send to PostgreSQL Backend API
+            try {
+                const res = await fetch('/api/plants', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name,
+                        category,
+                        price: 100,
+                        quantity,
+                        icon: '🌱'
+                    })
+                });
+
+                if (res.ok) {
+                    await loadStockFromAPI();
+                    document.getElementById('stockForm').reset();
+                    document.getElementById('plantQuantity').value = 10;
+                    return;
+                }
+            } catch (err) {
+                console.error('API Error adding plant:', err);
             }
 
+            // Client-side fallback
             const existingPlant = stock.find(item => item.name.toLowerCase() === name.toLowerCase());
-
             if (existingPlant) {
                 existingPlant.quantity += quantity;
                 existingPlant.category = category;
@@ -393,39 +442,72 @@
                 });
             }
 
-            saveStock();
+            saveStockLocally();
             renderTable();
             document.getElementById('stockForm').reset();
             document.getElementById('plantQuantity').value = 10;
         });
 
-        document.getElementById('stockTableBody').addEventListener('click', function (event) {
+        document.getElementById('stockTableBody').addEventListener('click', async function (event) {
             const target = event.target.closest('button');
             if (!target) return;
 
             const action = target.dataset.action;
-            const id = Number(target.dataset.id);
+            const id = target.dataset.id;
 
-            const item = stock.find(entry => entry.id === id);
+            const item = stock.find(entry => String(entry.id) === String(id));
             if (!item) return;
 
-            if (action === 'increase') {
-                item.quantity += 1;
-            }
+            if (action === 'increase' || action === 'decrease') {
+                const adjustment = action === 'increase' ? 1 : -1;
+                const newQty = Math.max(0, (Number(item.quantity) || 0) + adjustment);
 
-            if (action === 'decrease') {
-                item.quantity = Math.max(0, item.quantity - 1);
+                try {
+                    const res = await fetch(`/api/stock/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ quantity: newQty })
+                    });
+                    if (res.ok) {
+                        item.quantity = newQty;
+                        saveStockLocally();
+                        renderTable();
+                        return;
+                    }
+                } catch (err) {
+                    console.error('API Error adjusting stock:', err);
+                }
+
+                item.quantity = newQty;
+                saveStockLocally();
+                renderTable();
             }
 
             if (action === 'delete') {
-                stock = stock.filter(entry => entry.id !== id);
-            }
+                if (!confirm(`Are you sure you want to remove "${item.name}" from stock?`)) return;
 
-            saveStock();
-            renderTable();
+                try {
+                    const res = await fetch(`/api/plants/${id}`, {
+                        method: 'DELETE'
+                    });
+                    if (res.ok) {
+                        stock = stock.filter(entry => String(entry.id) !== String(id));
+                        saveStockLocally();
+                        renderTable();
+                        return;
+                    }
+                } catch (err) {
+                    console.error('API Error deleting plant:', err);
+                }
+
+                stock = stock.filter(entry => String(entry.id) !== String(id));
+                saveStockLocally();
+                renderTable();
+            }
         });
 
-        renderTable();
+        // Initialize from API
+        loadStockFromAPI();
     </script>
 </body>
 </html>

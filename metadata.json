@@ -1,0 +1,6 @@
+{
+  "name": "Nursery Management System",
+  "description": "A comprehensive nursery management system for managing plants, stock, customers, orders, payments, and authorized users.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
