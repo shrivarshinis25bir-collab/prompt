@@ -965,9 +965,166 @@ if (heroVideo) {
     }, 1500);
 }
 
+/* ================================
+   8. AI ASSISTANT CHATBOT CONTROLLER
+================================ */
+
+const aiChatHistory = [];
+
+function formatAiMarkdown(text) {
+    if (!text) return '';
+    // Basic HTML escaping
+    let html = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+    // Bold text: **text**
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+    // Bullet points starting with bullet or dash
+    const lines = html.split('\n');
+    const formattedLines = lines.map(line => {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('•') || trimmed.startsWith('-')) {
+            const content = trimmed.replace(/^[•\-]\s*/, '');
+            return `<div style="display: flex; gap: 6px; margin: 3px 0 3px 6px;"><span>🌱</span><span>${content}</span></div>`;
+        }
+        return line;
+    });
+
+    return formattedLines.join('<br>');
+}
+
+function openAiAssistantModal() {
+    openModal('aiModal');
+    setTimeout(() => {
+        const input = document.getElementById('aiChatInput');
+        if (input) input.focus();
+    }, 150);
+}
+
+function appendAiMessage(role, content) {
+    const messagesContainer = document.getElementById('aiChatMessages');
+    const chatBody = document.querySelector('.ai-chat-body');
+    if (!messagesContainer) return;
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `ai-msg ${role === 'user' ? 'user-msg' : 'assistant-msg'}`;
+
+    const avatarText = role === 'user' ? (state.activeUser ? state.activeUser.charAt(0) : 'U') : '🌿';
+    const formattedContent = role === 'user' ? content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : formatAiMarkdown(content);
+
+    msgDiv.innerHTML = `
+        <div class="msg-avatar">${avatarText}</div>
+        <div class="msg-bubble">${formattedContent}</div>
+    `;
+
+    messagesContainer.appendChild(msgDiv);
+    if (chatBody) {
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+}
+
+async function handleAiChatSubmit(messageText) {
+    const text = (messageText || '').trim();
+    if (!text) return;
+
+    const input = document.getElementById('aiChatInput');
+    const sendBtn = document.getElementById('aiSendBtn');
+    const typingIndicator = document.getElementById('aiTypingIndicator');
+    const chatBody = document.querySelector('.ai-chat-body');
+    const badge = document.getElementById('aiBadgeStatus');
+
+    if (input) input.value = '';
+    if (sendBtn) sendBtn.disabled = true;
+    if (input) input.disabled = true;
+
+    // Append user message
+    appendAiMessage('user', text);
+    aiChatHistory.push({ role: 'user', content: text });
+
+    // Show typing
+    if (typingIndicator) {
+        typingIndicator.style.display = 'flex';
+        if (chatBody) chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    try {
+        const res = await fetch('/api/ai/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: text,
+                history: aiChatHistory.slice(-6)
+            })
+        });
+
+        if (typingIndicator) typingIndicator.style.display = 'none';
+
+        if (res.ok) {
+            const data = await res.json();
+            const reply = data.reply || 'No response generated.';
+            if (badge) {
+                badge.textContent = data.source === 'gemini' ? 'Gemini 3.8 Flash' : 'PostgreSQL Grounded';
+            }
+            appendAiMessage('assistant', reply);
+            aiChatHistory.push({ role: 'assistant', content: reply });
+        } else {
+            appendAiMessage('assistant', '⚠️ Sorry, I could not retrieve data from the nursery system right now. Please try asking again.');
+        }
+    } catch (err) {
+        if (typingIndicator) typingIndicator.style.display = 'none';
+        appendAiMessage('assistant', '⚠️ Connection error contacting the AI assistant service. Please check your network and try again.');
+        console.error('AI chat error:', err);
+    } finally {
+        if (sendBtn) sendBtn.disabled = false;
+        if (input) {
+            input.disabled = false;
+            input.focus();
+        }
+    }
+}
+
+function setupAiAssistant() {
+    const openHeaderBtn = document.getElementById('openAiAssistantBtn');
+    const openSidebarBtn = document.getElementById('sidebarAiNavBtn');
+    const chatForm = document.getElementById('aiChatForm');
+    const input = document.getElementById('aiChatInput');
+    const chips = document.querySelectorAll('.ai-chip');
+
+    if (openHeaderBtn) {
+        openHeaderBtn.addEventListener('click', openAiAssistantModal);
+    }
+
+    if (openSidebarBtn) {
+        openSidebarBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openAiAssistantModal();
+        });
+    }
+
+    if (chatForm && input) {
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            handleAiChatSubmit(input.value);
+        });
+    }
+
+    chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            const prompt = chip.getAttribute('data-prompt');
+            if (prompt) {
+                handleAiChatSubmit(prompt);
+            }
+        });
+    });
+}
+
 // Initial Boot
 document.addEventListener('DOMContentLoaded', async () => {
     setupUserSwitching();
+    setupAiAssistant();
     await checkDatabaseHealth();
     await loadDashboard();
     await loadPlants();

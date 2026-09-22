@@ -81,6 +81,11 @@
                 <span>User Management</span>
             </button>
 
+            <button class="nav-item" id="sidebarAiNavBtn" style="border-top: 1px solid rgba(255,255,255,0.08); margin-top: 6px; color: #a3e6be;">
+                <span class="nav-icon">✨</span>
+                <span>AI Assistant</span>
+            </button>
+
         </nav>
 
 
@@ -131,6 +136,11 @@
 
 
             <div class="header-right" style="display: flex; align-items: center; gap: 15px;">
+
+                <button class="ai-assistant-btn" id="openAiAssistantBtn" title="Ask AI Nursery Assistant">
+                    <span class="ai-sparkle">✨</span>
+                    <span>AI Assistant</span>
+                </button>
 
                 <div class="db-badge" id="dbStatusBadge" title="Supabase PostgreSQL">
                     <span class="dot"></span>
@@ -1147,6 +1157,78 @@
                 <button type="submit" class="btn-primary">Record Payment</button>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- ================= AI ASSISTANT MODAL ================= -->
+<div class="modal-overlay" id="aiModal">
+    <div class="modal-box ai-chat-box">
+        <div class="modal-header ai-modal-header">
+            <div class="ai-header-info">
+                <span class="ai-avatar-icon">🌿</span>
+                <div>
+                    <h3 style="margin: 0; font-size: 15px; color: var(--forest); display: flex; align-items: center; gap: 8px;">
+                        Nursery AI Assistant
+                        <span class="ai-badge" id="aiBadgeStatus">Gemini & PostgreSQL</span>
+                    </h3>
+                    <span class="ai-header-sub">Ask real-time questions on stock, plant catalog, orders & revenue</span>
+                </div>
+            </div>
+            <button class="modal-close" onclick="closeModal('aiModal')">&times;</button>
+        </div>
+
+        <div class="ai-chat-body">
+            <!-- Quick prompt chips -->
+            <div class="ai-quick-prompts">
+                <button type="button" class="ai-chip" data-prompt="What plants are low on stock?">⚠️ Low Stock Alert</button>
+                <button type="button" class="ai-chip" data-prompt="How much revenue is paid versus pending?">💰 Revenue & Payments</button>
+                <button type="button" class="ai-chip" data-prompt="Give me a summary of recent customer orders">📦 Recent Orders</button>
+                <button type="button" class="ai-chip" data-prompt="List all plants in our nursery with their prices">🌱 Plant Catalog</button>
+                <button type="button" class="ai-chip" data-prompt="List registered customers and phone numbers">👥 Customers</button>
+            </div>
+
+            <!-- Messages stream -->
+            <div class="ai-messages" id="aiChatMessages">
+                <div class="ai-msg assistant-msg">
+                    <div class="msg-avatar">🌿</div>
+                    <div class="msg-bubble">
+                        Hello Varshini & Sri! I am your <strong>Nursery AI Assistant</strong>.
+                        <br><br>
+                        I have real-time access to your database of plants, current stock, registered customers, orders, and payment settlements.
+                        <br><br>
+                        Click a quick query above or type any operational question below!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Typing indicator -->
+            <div class="ai-typing-indicator" id="aiTypingIndicator" style="display: none;">
+                <div class="msg-avatar">🌿</div>
+                <div class="typing-bubble">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span style="font-size: 11px; margin-left: 6px; color: var(--muted);">Analyzing live nursery records...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="ai-chat-footer">
+            <form id="aiChatForm" class="ai-chat-form">
+                <input
+                    type="text"
+                    id="aiChatInput"
+                    class="ai-input"
+                    placeholder="Ask about inventory, plant prices, pending revenue, or customers..."
+                    autocomplete="off"
+                    required
+                >
+                <button type="submit" class="ai-send-btn" id="aiSendBtn" title="Send Question">
+                    <span>Ask AI</span>
+                    <span class="send-icon">➤</span>
+                </button>
+            </form>
+        </div>
     </div>
 </div>
 

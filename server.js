@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const db = require('./db');
+const aiService = require('./ai_service');
 
 const app = express();
 const PORT = 3000;
@@ -288,6 +289,28 @@ app.post('/api/auth/login', async (req, res) => {
     res.json({ success: true, user });
   } catch (err) {
     res.status(401).json({ error: err.message });
+  }
+});
+
+// ==========================================
+// 7. AI ASSISTANT API (Gemini & Database Grounding)
+// ==========================================
+app.post('/api/ai/chat', async (req, res) => {
+  try {
+    const { message, history } = req.body;
+    if (!message || typeof message !== 'string' || !message.trim()) {
+      return res.status(400).json({ error: 'Message text is required' });
+    }
+    const result = await aiService.answerNurseryQuestion(message.trim(), history || [], db);
+    res.json({
+      success: true,
+      reply: result.reply,
+      source: result.source,
+      timestamp: new Date().toISOString()
+    });
+  } catch (err) {
+    console.error('[API /api/ai/chat] Error:', err);
+    res.status(500).json({ error: 'Failed to process AI chat query', details: err.message });
   }
 });
 
