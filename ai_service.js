@@ -174,30 +174,45 @@ LIVE DATABASE SNAPSHOT:
         parts: [{ text: userMessage }]
       });
 
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Gemini API timeout')), 3500)
-      );
+      // Try candidate models in order of current availability and speed
+      const CANDIDATE_MODELS = ['gemini-3.1-flash-lite', 'gemini-flash-latest', 'gemini-3.8-flash'];
 
-      const response = await Promise.race([
-        client.models.generateContent({
-          model: 'gemini-3.8-flash',
-          contents,
-          config: {
-            systemInstruction,
-            temperature: 0.3
+      for (const modelName of CANDIDATE_MODELS) {
+        let timerId = null;
+        try {
+          const timeoutPromise = new Promise((_, reject) => {
+            timerId = setTimeout(() => reject(new Error('Model timeout')), 4500);
+          });
+
+          const response = await Promise.race([
+            client.models.generateContent({
+              model: modelName,
+              contents,
+              config: {
+                systemInstruction,
+                temperature: 0.3
+              }
+            }),
+            timeoutPromise
+          ]);
+
+          if (timerId) clearTimeout(timerId);
+
+          if (response && response.text) {
+            return {
+              reply: response.text,
+              source: 'gemini',
+              model: modelName
+            };
           }
-        }),
-        timeoutPromise
-      ]);
-
-      if (response && response.text) {
-        return {
-          reply: response.text,
-          source: 'gemini'
-        };
+        } catch (modelError) {
+          if (timerId) clearTimeout(timerId);
+          // If a model is experiencing high demand (503) or times out, try the next candidate model
+          continue;
+        }
       }
-    } catch (geminiError) {
-      console.warn('[AI Service] Gemini generateContent failed, falling back to data engine:', geminiError.message);
+    } catch (clientErr) {
+      // Gracefully continue to grounded data engine
     }
   }
 

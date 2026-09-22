@@ -137,6 +137,51 @@ body {
     border-bottom:
         1px solid rgba(255,255,255,0.08);
 
+    position: relative;
+
+}
+
+.sidebar-close-btn {
+    display: none;
+    margin-left: auto;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font-size: 16px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+    touch-action: manipulation;
+}
+
+.sidebar-close-btn:active {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(0.95);
+}
+
+.sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(7, 26, 18, 0.6);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-backdrop.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+body.menu-open {
+    overflow: hidden;
 }
 
 
@@ -1747,209 +1792,506 @@ tbody tr:last-child td {
 
 
 /* =========================================
-   TABLET
+   TABLET RESPONSIVENESS (max-width: 1024px)
 ========================================= */
 
-@media (max-width: 1100px) {
+@media (max-width: 1024px) {
 
     :root {
-        --sidebar-width: 235px;
+        --sidebar-width: 250px;
     }
 
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.45);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .sidebar-close-btn {
+        display: flex;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .header {
+        height: 68px;
+        padding: 0 20px;
+    }
+
+    .mobile-menu {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 8px;
+        touch-action: manipulation;
+        font-size: 24px;
+    }
+
+    .mobile-menu:active {
+        background: #eaf3ed;
+    }
 
     .summary-grid {
-
-        grid-template-columns:
-            repeat(2, 1fr);
-
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
     }
-
 
     .module-grid {
-
-        grid-template-columns:
-            repeat(2, 1fr);
-
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
     }
 
+    .hero {
+        min-height: 280px;
+    }
+
+    .hero-content {
+        padding: 34px;
+    }
 
     .hero h1 {
-
-        font-size: 48px;
-
+        font-size: 44px;
     }
 
+    .page {
+        padding: 24px 20px 40px;
+    }
+
+    .users-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
-
 /* =========================================
-   MOBILE
+   MOBILE RESPONSIVENESS (max-width: 768px)
 ========================================= */
 
 @media (max-width: 768px) {
 
-    .sidebar {
-
-        transform: translateX(-100%);
-
-        transition:
-            transform 0.3s ease;
-
-    }
-
-
-    .sidebar.open {
-
-        transform: translateX(0);
-
-    }
-
-
-    .main-content {
-
-        margin-left: 0;
-
-    }
-
-
     .header {
-
-        height: 65px;
-
-        padding: 0 18px;
-
+        height: 62px;
+        padding: 0 14px;
+        gap: 8px;
     }
 
-
-    .mobile-menu {
-
-        display: block;
-
+    .header-left {
+        gap: 10px;
     }
 
+    .header-caption {
+        font-size: 7.5px;
+        letter-spacing: 1px;
+        margin-bottom: 2px;
+    }
+
+    .header h3 {
+        font-size: 15px;
+    }
+
+    .header-right {
+        gap: 8px !important;
+    }
 
     .header-profile > div:nth-child(2),
     .header-profile .down-arrow {
-
         display: none;
-
     }
 
+    .header-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .ai-assistant-btn {
+        padding: 6px 10px;
+        font-size: 10.5px;
+        min-height: 38px;
+        touch-action: manipulation;
+    }
+
+    .db-badge {
+        padding: 4px 7px;
+        font-size: 8.5px;
+        max-width: 140px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
     .page {
-
-        padding: 20px 16px 35px;
-
+        padding: 16px 12px 35px;
     }
 
+    .page-header {
+        margin-bottom: 18px;
+    }
+
+    .page-header h1 {
+        font-size: 26px;
+        margin: 4px 0;
+    }
+
+    .page-header p {
+        font-size: 11.5px;
+    }
 
     .hero {
-
-        min-height: 270px;
-
+        min-height: 230px;
+        border-radius: 15px;
+        margin-bottom: 16px;
     }
-
 
     .hero-content {
-
-        padding: 30px;
-
+        padding: 24px 20px;
     }
 
+    .hero-small {
+        font-size: 9.5px;
+        letter-spacing: 1.5px;
+    }
 
     .hero h1 {
-
-        font-size: 42px;
-
+        font-size: 34px;
+        margin: 6px 0 10px;
     }
-
-
-    .hero-decoration {
-
-        display: none;
-
-    }
-
-
-    .summary-grid {
-
-        grid-template-columns: 1fr;
-
-    }
-
-
-    .module-grid {
-
-        grid-template-columns: 1fr;
-
-    }
-
-
-    .data-header {
-
-        align-items: flex-start;
-
-        gap: 15px;
-
-    }
-
-
-    .users-container {
-
-        grid-template-columns: 1fr;
-
-    }
-
-}
-
-
-/* =========================================
-   SMALL MOBILE
-========================================= */
-
-@media (max-width: 450px) {
-
-    .hero {
-
-        min-height: 240px;
-
-    }
-
-
-    .hero-content {
-
-        padding: 24px;
-
-    }
-
-
-    .hero h1 {
-
-        font-size: 36px;
-
-    }
-
 
     .hero p {
-
-        font-size: 12px;
-
+        font-size: 12.5px;
+        line-height: 1.55;
     }
 
+    .hero-decoration {
+        display: none;
+    }
+
+    .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 22px;
+    }
+
+    .summary-card {
+        padding: 13px 12px;
+        gap: 10px;
+        border-radius: 11px;
+    }
+
+    .summary-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 16px;
+        border-radius: 9px;
+    }
+
+    .summary-info span {
+        font-size: 9px;
+    }
+
+    .summary-info strong {
+        font-size: 19px;
+    }
+
+    .module-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+
+    .module-card {
+        min-height: auto;
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .module-top {
+        margin-bottom: 12px;
+    }
+
+    .module-card h3 {
+        font-size: 15px;
+        margin-bottom: 4px;
+    }
+
+    .module-card p {
+        font-size: 11.5px;
+        line-height: 1.5;
+        margin-bottom: 14px;
+    }
+
+    .manage-btn {
+        min-height: 38px;
+        padding: 7px 12px;
+        touch-action: manipulation;
+    }
 
     .data-card {
-
-        padding: 15px;
-
+        padding: 16px 14px;
+        border-radius: 13px;
+        overflow: hidden;
     }
 
-
-    .module-placeholder {
-
-        padding: 20px;
-
+    .data-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        margin-bottom: 16px;
     }
 
+    .data-header > div > span {
+        font-size: 8px;
+    }
+
+    .data-header h2 {
+        font-size: 17px;
+        margin: 3px 0;
+    }
+
+    .data-header p {
+        font-size: 11px;
+    }
+
+    .data-header .btn-primary,
+    .data-header .btn-secondary,
+    .data-header .view-button {
+        width: 100%;
+        justify-content: center;
+        min-height: 42px;
+        font-size: 12px;
+        touch-action: manipulation;
+    }
+
+    /* Horizontal scroll indicator and touch scrolling for tables */
+    .table-wrapper {
+        position: relative;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        margin: 0 -4px;
+        width: calc(100% + 8px);
+    }
+
+    table {
+        min-width: 580px;
+    }
+
+    th {
+        padding: 10px 10px;
+        font-size: 8.5px;
+        white-space: nowrap;
+    }
+
+    td {
+        padding: 12px 10px;
+        font-size: 11.5px;
+        line-height: 1.4;
+    }
+
+    .actions-cell {
+        gap: 6px;
+        flex-wrap: nowrap;
+    }
+
+    .btn-sm {
+        min-height: 32px;
+        padding: 6px 11px;
+        font-size: 10.5px;
+        display: inline-flex;
+        align-items: center;
+        touch-action: manipulation;
+    }
+
+    .qty-btn {
+        width: 34px;
+        height: 34px;
+        font-size: 14px;
+        touch-action: manipulation;
+    }
+
+    .users-container {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .system-user {
+        padding: 14px 16px;
+        min-height: 64px;
+        touch-action: manipulation;
+    }
+
+    .system-avatar {
+        width: 44px;
+        height: 44px;
+        font-size: 17px;
+    }
+
+    /* Modals on Mobile */
+    .modal-overlay {
+        padding: 12px;
+        align-items: flex-end;
+    }
+
+    .modal-box {
+        max-width: 100%;
+        border-radius: 16px 16px 0 0;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .modal-header {
+        padding: 16px 18px;
+    }
+
+    .modal-close {
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        border-radius: 50%;
+        touch-action: manipulation;
+    }
+
+    .modal-close:active {
+        background: #f1f4f2;
+    }
+
+    .modal-body {
+        padding: 16px 18px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        flex: 1;
+    }
+
+    .form-group {
+        margin-bottom: 14px;
+    }
+
+    .form-control {
+        font-size: 16px; /* Prevents auto-zoom on iOS */
+        padding: 11px 13px;
+        border-radius: 9px;
+        min-height: 44px;
+    }
+
+    .modal-footer {
+        padding: 14px 18px 20px;
+        flex-direction: column-reverse;
+        gap: 8px;
+    }
+
+    .modal-footer button {
+        width: 100%;
+        min-height: 44px;
+        justify-content: center;
+        font-size: 13px;
+    }
+
+    /* AI Assistant Modal on Mobile */
+    .ai-chat-box {
+        width: 100%;
+        max-width: 100%;
+        max-height: 92vh;
+        border-radius: 16px 16px 0 0;
+    }
+
+    .ai-modal-header {
+        padding: 14px 16px;
+    }
+
+    .ai-header-sub {
+        display: none;
+    }
+
+    .ai-chat-body {
+        padding: 14px 14px;
+        min-height: 240px;
+        max-height: 52vh;
+    }
+
+    .ai-quick-prompts {
+        gap: 5px;
+    }
+
+    .ai-chip {
+        padding: 6px 11px;
+        font-size: 10px;
+        touch-action: manipulation;
+    }
+
+    .ai-msg {
+        max-width: 95%;
+    }
+
+    .ai-input {
+        font-size: 16px; /* Prevents iOS auto-zoom */
+        padding: 11px 14px;
+        min-height: 44px;
+    }
+
+    .ai-send-btn {
+        min-height: 44px;
+        padding: 0 16px;
+        touch-action: manipulation;
+    }
+}
+
+/* =========================================
+   EXTRA SMALL MOBILE (max-width: 480px)
+========================================= */
+
+@media (max-width: 480px) {
+
+    .header-caption {
+        display: none;
+    }
+
+    .header-left {
+        gap: 8px;
+    }
+
+    .db-badge {
+        display: none; /* Conserve header space for title & AI button */
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero {
+        min-height: 200px;
+    }
+
+    .hero-content {
+        padding: 20px 16px;
+    }
+
+    .hero h1 {
+        font-size: 30px;
+    }
+
+    .hero p {
+        font-size: 12px;
+    }
+
+    .data-card {
+        padding: 14px 10px;
+    }
+
+    .table-wrapper {
+        margin: 0;
+        width: 100%;
+    }
 }
 
 /* =========================================
@@ -2484,4 +2826,201 @@ tbody tr:last-child td {
 .send-icon {
     font-size: 11px;
 }
+
+/* =========================================
+   TOUCH INTERACTION & ACCESSIBILITY POLISH
+========================================= */
+
+/* Ensure smooth touch scrolling on mobile */
+.table-wrapper,
+.modal-body,
+.ai-chat-body,
+.nav {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+
+/* Clean tap highlight styling */
+button,
+a,
+input,
+select,
+.nav-item,
+.summary-card,
+.module-card,
+.system-user {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Form controls font size protection against iOS auto-zoom */
+@media screen and (max-width: 768px) {
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
+}
+
+/* =========================================
+   PROGRESSIVE WEB APP (PWA) STYLES
+========================================= */
+
+/* Header Install Button */
+.pwa-install-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: #eaf5ee;
+    color: var(--primary);
+    border: 1px solid #bce1c8;
+    border-radius: 9px;
+    padding: 7px 13px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+    touch-action: manipulation;
+    white-space: nowrap;
+}
+
+.pwa-install-btn:hover {
+    background: #d8eedf;
+    border-color: #9cd4ae;
+}
+
+.pwa-install-btn:active {
+    transform: scale(0.96);
+}
+
+.pwa-install-icon {
+    font-size: 14px;
+}
+
+/* Sidebar Install Item */
+.pwa-install-nav {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Offline Status Banner */
+.offline-banner {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 9px 18px;
+    background: #b45309;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    animation: slideDown 0.3s ease-out;
+    z-index: 900;
+}
+
+.offline-banner.active {
+    display: flex;
+}
+
+.offline-banner.online-restored {
+    background: #1b4332;
+}
+
+.offline-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #fde68a;
+    display: inline-block;
+    box-shadow: 0 0 6px #fde68a;
+    animation: offlinePulse 1.8s infinite;
+}
+
+.offline-banner.online-restored .offline-dot {
+    background: #52b788;
+    box-shadow: 0 0 6px #52b788;
+    animation: none;
+}
+
+@keyframes offlinePulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.4;
+        transform: scale(0.85);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* iOS Guide Modal Box */
+.ios-modal-box {
+    max-width: 440px;
+    border-radius: 16px;
+}
+
+/* =========================================
+   STANDALONE DISPLAY MODE (Installed PWA)
+========================================= */
+
+@media (display-mode: standalone) {
+    /* Hide in-app install triggers when already running as installed app */
+    .pwa-install-btn,
+    .pwa-install-nav {
+        display: none !important;
+    }
+
+    /* Safe Area Padding for mobile notches and gesture indicators */
+    body {
+        padding-top: env(safe-area-inset-top, 0);
+        padding-bottom: env(safe-area-inset-bottom, 0);
+        padding-left: env(safe-area-inset-left, 0);
+        padding-right: env(safe-area-inset-right, 0);
+    }
+
+    .header {
+        padding-top: max(env(safe-area-inset-top, 0), 0);
+    }
+
+    /* Polish app header feel in standalone */
+    .header {
+        border-bottom: 1px solid var(--border);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    }
+}
+
+/* Responsive adjustments for PWA Install Button */
+@media (max-width: 640px) {
+    .pwa-install-btn {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+    .pwa-install-btn .pwa-install-text {
+        display: inline;
+    }
+}
+
+@media (max-width: 420px) {
+    .pwa-install-btn .pwa-install-text {
+        display: none;
+    }
+    .pwa-install-btn {
+        padding: 6px 8px;
+    }
+}
+
 

@@ -315,6 +315,21 @@ app.post('/api/ai/chat', async (req, res) => {
 });
 
 // ==========================================
+// PWA SERVICE WORKER & MANIFEST ROUTES
+// ==========================================
+app.get('/sw.js', (req, res) => {
+  res.setHeader('Service-Worker-Allowed', '/');
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+  res.sendFile(path.join(__dirname, 'plant management', 'sw.js'));
+});
+
+app.get('/manifest.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/manifest+json; charset=utf-8');
+  res.sendFile(path.join(__dirname, 'plant management', 'manifest.json'));
+});
+
+// ==========================================
 // STATIC ASSETS SERVING
 // ==========================================
 app.use(express.static(path.join(__dirname, 'plant management')));

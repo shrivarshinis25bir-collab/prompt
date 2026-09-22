@@ -10,6 +10,19 @@
     <meta property="og:title" content="Nursery Management System">
     <meta property="og:description" content="A comprehensive nursery management system for managing plants, stock, customers, orders, payments, and authorized users.">
 
+    <!-- Progressive Web App (PWA) Standards -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1b4332">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="GreenLeaf">
+
+    <!-- PWA Brand Icons -->
+    <link rel="icon" type="image/svg+xml" href="/icon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -24,9 +37,11 @@
 
 <div class="app">
 
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
     <!-- ================= SIDEBAR ================= -->
 
-    <aside class="sidebar" id="sidebar">
+    <aside class="sidebar" id="sidebar" aria-label="Sidebar Navigation">
 
         <div class="brand">
 
@@ -38,6 +53,8 @@
                 <h2>NURSERY</h2>
                 <p>MANAGEMENT SYSTEM</p>
             </div>
+
+            <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close navigation menu">✕</button>
 
         </div>
 
@@ -84,6 +101,11 @@
             <button class="nav-item" id="sidebarAiNavBtn" style="border-top: 1px solid rgba(255,255,255,0.08); margin-top: 6px; color: #a3e6be;">
                 <span class="nav-icon">✨</span>
                 <span>AI Assistant</span>
+            </button>
+
+            <button class="nav-item pwa-install-nav" id="sidebarPwaInstallBtn" style="color: #74c69d; margin-top: 4px; display: none;">
+                <span class="nav-icon">📲</span>
+                <span>Install App</span>
             </button>
 
         </nav>
@@ -137,6 +159,11 @@
 
             <div class="header-right" style="display: flex; align-items: center; gap: 15px;">
 
+                <button class="pwa-install-btn" id="pwaInstallBtn" title="Install App to Device" style="display: none;">
+                    <span class="pwa-install-icon">📲</span>
+                    <span class="pwa-install-text">Install App</span>
+                </button>
+
                 <button class="ai-assistant-btn" id="openAiAssistantBtn" title="Ask AI Nursery Assistant">
                     <span class="ai-sparkle">✨</span>
                     <span>AI Assistant</span>
@@ -165,6 +192,12 @@
             </div>
 
         </header>
+
+        <!-- Offline Status Notification Banner -->
+        <div class="offline-banner" id="offlineBanner" role="status" aria-live="polite">
+            <span class="offline-dot"></span>
+            <span id="offlineBannerText">Offline Mode — Viewing saved local inventory and records</span>
+        </div>
 
 
         <!-- ==================================================
@@ -1228,6 +1261,46 @@
                     <span class="send-icon">➤</span>
                 </button>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     PWA iOS INSTALLATION GUIDE MODAL
+=========================================== -->
+<div class="modal-overlay" id="iosInstallModal" role="dialog" aria-modal="true" aria-labelledby="iosModalTitle">
+    <div class="modal-box ios-modal-box">
+        <div class="modal-header">
+            <h3 id="iosModalTitle">Install GreenLeaf on iPhone / iPad</h3>
+            <button class="modal-close" id="closeIosInstallModal" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="modal-body" style="padding: 24px;">
+            <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px;">
+                <img src="/apple-touch-icon.png" width="56" height="56" style="border-radius: 14px; box-shadow: 0 4px 14px rgba(0,0,0,0.15);" alt="GreenLeaf App Icon">
+                <div>
+                    <strong style="font-size: 16px; color: var(--primary); display: block;">GreenLeaf Nursery</strong>
+                    <span style="font-size: 12.5px; color: var(--muted);">Standalone Progressive Web App</span>
+                </div>
+            </div>
+
+            <div style="background: var(--bg-soft); border-radius: 12px; padding: 16px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 14px;">
+                <div style="display: flex; gap: 12px; align-items: flex-start;">
+                    <span style="background: var(--primary); color: #ffffff; font-weight: 700; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 13px;">1</span>
+                    <p style="font-size: 13.5px; margin: 0; line-height: 1.5; color: var(--text);">
+                        Tap the <strong>Share</strong> button <span style="font-size: 16px; margin: 0 2px;">⎋</span> at the bottom of Safari.
+                    </p>
+                </div>
+                <div style="display: flex; gap: 12px; align-items: flex-start;">
+                    <span style="background: var(--primary); color: #ffffff; font-weight: 700; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 13px;">2</span>
+                    <p style="font-size: 13.5px; margin: 0; line-height: 1.5; color: var(--text);">
+                        Scroll down and tap <strong>Add to Home Screen</strong> <span style="font-size: 16px; margin: 0 2px;">➕</span>.
+                    </p>
+                </div>
+            </div>
+            <p style="font-size: 12px; color: var(--muted); margin: 0;">Once installed, GreenLeaf will launch fullscreen without browser bars and work offline.</p>
+        </div>
+        <div class="modal-footer" style="padding: 16px 24px;">
+            <button class="btn-primary" id="gotItIosBtn" style="width: 100%; justify-content: center;">Got It</button>
         </div>
     </div>
 </div>

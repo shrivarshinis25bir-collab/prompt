@@ -58,7 +58,9 @@ function navigateToPage(pageId) {
         pageTitle.textContent = pageTitles[pageId];
     }
 
-    if (sidebar && sidebar.classList.contains("open")) {
+    if (typeof closeMobileSidebar === 'function') {
+        closeMobileSidebar();
+    } else if (sidebar && sidebar.classList.contains("open")) {
         sidebar.classList.remove("open");
     }
 
@@ -89,18 +91,55 @@ document.querySelectorAll(".view-button[data-page], .summary-card[data-page]").f
     });
 });
 
-// Mobile Sidebar
+// Mobile Sidebar & Backdrop
+const sidebarBackdrop = document.getElementById("sidebarBackdrop");
+const sidebarCloseBtn = document.getElementById("sidebarCloseBtn");
+
+function openMobileSidebar() {
+    if (sidebar) {
+        sidebar.classList.add("open");
+        if (sidebarBackdrop) sidebarBackdrop.classList.add("active");
+        document.body.classList.add("menu-open");
+    }
+}
+
+function closeMobileSidebar() {
+    if (sidebar) {
+        sidebar.classList.remove("open");
+        if (sidebarBackdrop) sidebarBackdrop.classList.remove("active");
+        document.body.classList.remove("menu-open");
+    }
+}
+
 if (menuButton) {
-    menuButton.addEventListener("click", function () {
-        sidebar.classList.toggle("open");
+    menuButton.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (sidebar && sidebar.classList.contains("open")) {
+            closeMobileSidebar();
+        } else {
+            openMobileSidebar();
+        }
+    });
+}
+
+if (sidebarCloseBtn) {
+    sidebarCloseBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        closeMobileSidebar();
+    });
+}
+
+if (sidebarBackdrop) {
+    sidebarBackdrop.addEventListener("click", function () {
+        closeMobileSidebar();
     });
 }
 
 document.addEventListener("click", function (event) {
-    if (window.innerWidth <= 768 && sidebar && sidebar.classList.contains("open")) {
+    if (window.innerWidth <= 1024 && sidebar && sidebar.classList.contains("open")) {
         const isClickInside = sidebar.contains(event.target) || (menuButton && menuButton.contains(event.target));
         if (!isClickInside) {
-            sidebar.classList.remove("open");
+            closeMobileSidebar();
         }
     }
 });
@@ -1121,10 +1160,198 @@ function setupAiAssistant() {
     });
 }
 
+// ==========================================
+// PROGRESSIVE WEB APP (PWA) MODULE
+// ==========================================
+
+let deferredPwaPrompt = null;
+
+function isPwaStandalone() {
+    return window.matchMedia('(display-mode: standalone)').matches ||
+           window.navigator.standalone === true ||
+           document.referrer.includes('android-app://');
+}
+
+function isIosDevice() {
+    return /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+}
+
+async function registerServiceWorker() {
+    if (!('serviceWorker' in navigator)) {
+        console.log('[PWA] Service workers are not supported by this browser environment.');
+        return;
+    }
+
+    try {
+        const registration = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+        console.log('[PWA] Service Worker registered successfully with scope:', registration.scope);
+
+        // Check for updates
+        registration.addEventListener('updatefound', () => {
+            const installingWorker = registration.installing;
+            if (installingWorker) {
+                installingWorker.addEventListener('statechange', () => {
+                    if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                        console.log('[PWA] New version of GreenLeaf is available.');
+                    }
+                });
+            }
+        });
+    } catch (error) {
+        console.warn('[PWA] Service Worker registration failed:', error);
+    }
+}
+
+function setupPwaInstall() {
+    const headerInstallBtn = document.getElementById('pwaInstallBtn');
+    const sidebarInstallBtn = document.getElementById('sidebarPwaInstallBtn');
+    const iosModal = document.getElementById('iosInstallModal');
+    const closeIosModalBtn = document.getElementById('closeIosInstallModal');
+    const gotItIosBtn = document.getElementById('gotItIosBtn');
+
+    // If running in standalone mode (already installed), keep buttons hidden
+    if (isPwaStandalone()) {
+        console.log('[PWA] Running in standalone mode');
+        if (headerInstallBtn) headerInstallBtn.style.display = 'none';
+        if (sidebarInstallBtn) sidebarInstallBtn.style.display = 'none';
+        return;
+    }
+
+    function showInstallTriggers() {
+        if (headerInstallBtn) headerInstallBtn.style.display = 'inline-flex';
+        if (sidebarInstallBtn) sidebarInstallBtn.style.display = 'flex';
+    }
+
+    function hideInstallTriggers() {
+        if (headerInstallBtn) headerInstallBtn.style.display = 'none';
+        if (sidebarInstallBtn) sidebarInstallBtn.style.display = 'none';
+    }
+
+    // 1. Android / Chrome / Edge beforeinstallprompt event
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent default browser mini-infobar
+        e.preventDefault();
+        deferredPwaPrompt = e;
+        showInstallTriggers();
+        console.log('[PWA] beforeinstallprompt captured; in-app install buttons revealed.');
+    });
+
+    // 2. iOS Safari detection (beforeinstallprompt is not fired on WebKit)
+    if (isIosDevice() && !isPwaStandalone()) {
+        showInstallTriggers();
+    }
+
+    // If on a desktop browser that supports PWA install, show triggers after short delay if installable
+    setTimeout(() => {
+        if (!isPwaStandalone() && (deferredPwaPrompt || isIosDevice())) {
+            showInstallTriggers();
+        }
+    }, 1500);
+
+    // 3. User clicks Install button
+    async function handleInstallClick() {
+        if (deferredPwaPrompt) {
+            // Native Chromium install prompt
+            deferredPwaPrompt.prompt();
+            const choiceResult = await deferredPwaPrompt.userChoice;
+            console.log('[PWA] User response to install prompt:', choiceResult.outcome);
+
+            if (choiceResult.outcome === 'accepted') {
+                hideInstallTriggers();
+            }
+            deferredPwaPrompt = null;
+        } else if (isIosDevice()) {
+            // Open iOS instructions modal
+            if (iosModal) iosModal.classList.add('active');
+        } else {
+            // Generic desktop fallback notice (e.g. Chrome omnibox icon)
+            alert('To install GreenLeaf, click the install icon (⊕ or 📲) in your browser address bar or select "Install App" from the browser menu.');
+        }
+    }
+
+    if (headerInstallBtn) {
+        headerInstallBtn.addEventListener('click', handleInstallClick);
+    }
+
+    if (sidebarInstallBtn) {
+        sidebarInstallBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleInstallClick();
+        });
+    }
+
+    // Modal close handlers
+    function closeIosGuide() {
+        if (iosModal) iosModal.classList.remove('active');
+    }
+
+    if (closeIosModalBtn) closeIosModalBtn.addEventListener('click', closeIosGuide);
+    if (gotItIosBtn) gotItIosBtn.addEventListener('click', closeIosGuide);
+    if (iosModal) {
+        iosModal.addEventListener('click', (e) => {
+            if (e.target === iosModal) closeIosGuide();
+        });
+    }
+
+    // 4. App Installed Event
+    window.addEventListener('appinstalled', (evt) => {
+        console.log('[PWA] GreenLeaf app was successfully installed!', evt);
+        hideInstallTriggers();
+        deferredPwaPrompt = null;
+    });
+}
+
+function setupConnectivityMonitoring() {
+    const offlineBanner = document.getElementById('offlineBanner');
+    const offlineText = document.getElementById('offlineBannerText');
+
+    function updateNetworkStatus() {
+        if (!offlineBanner) return;
+
+        if (!navigator.onLine) {
+            offlineBanner.classList.remove('online-restored');
+            offlineBanner.classList.add('active');
+            if (offlineText) {
+                offlineText.textContent = 'Offline Mode — Operating from cached nursery records';
+            }
+        } else {
+            if (offlineBanner.classList.contains('active')) {
+                offlineBanner.classList.add('online-restored');
+                if (offlineText) {
+                    offlineText.textContent = 'Connection Restored — Syncing latest nursery data';
+                }
+                setTimeout(() => {
+                    offlineBanner.classList.remove('active', 'online-restored');
+                }, 3500);
+            }
+        }
+    }
+
+    window.addEventListener('online', updateNetworkStatus);
+    window.addEventListener('offline', updateNetworkStatus);
+
+    // Initial check
+    if (!navigator.onLine) {
+        updateNetworkStatus();
+    }
+}
+
+function setupShortcutRouting() {
+    // Check if launched via manifest shortcut e.g. /#plants or /#stock
+    const hash = window.location.hash.replace('#', '');
+    if (hash && pageTitles[hash]) {
+        navigateToPage(hash);
+    }
+}
+
 // Initial Boot
 document.addEventListener('DOMContentLoaded', async () => {
     setupUserSwitching();
     setupAiAssistant();
+    setupShortcutRouting();
+    registerServiceWorker();
+    setupPwaInstall();
+    setupConnectivityMonitoring();
     await checkDatabaseHealth();
     await loadDashboard();
     await loadPlants();
