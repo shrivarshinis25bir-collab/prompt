@@ -206,341 +206,175 @@
 
         <section class="page active" id="dashboard">
 
-            <!-- Hero -->
-
-            <div class="hero">
-
-                <video
-                    class="hero-video"
-                    autoplay
-                    muted
-                    loop
-                    playsinline>
-
-                    <source src="assets/nursery.mp4" type="video/mp4">
-
-                </video>
-
-                <div class="hero-overlay"></div>
-
-
-                <div class="hero-content">
-
-                    <span class="hero-small">
-                        WELCOME BACK,
-                    </span>
-
-                    <h1>Varshini</h1>
-
-                    <p>
-                        Manage plants, stock, customers,
-                        orders and payments from one place.
-                    </p>
-
+            <!-- Clean, Simple Dashboard Header -->
+            <div class="dash-welcome-card">
+                <div class="dash-welcome-main">
+                    <div class="dash-welcome-text">
+                        <span class="dash-kicker">GREENLEAF BOTANICAL SANCTUARY</span>
+                        <h1 class="dash-welcome-title">Welcome back, <span id="dashOperatorName">Varshini</span></h1>
+                        <p class="dash-welcome-subtitle">Live overview of plant stock, customer orders, and nursery operations.</p>
+                    </div>
+                    <div class="dash-welcome-actions">
+                        <button type="button" class="dash-action-btn primary" id="dashBtnAddPlant" title="Add a new plant to catalog">
+                            <span class="btn-icon">+</span>
+                            <span>Add Plant</span>
+                        </button>
+                        <button type="button" class="dash-action-btn secondary" id="dashBtnNewOrder" title="Create a new customer order">
+                            <span class="btn-icon">🛒</span>
+                            <span>New Order</span>
+                        </button>
+                    </div>
                 </div>
-
-
-                <div class="hero-decoration">
-                    🌿
+                <div class="dash-quote-strip">
+                    <div class="dash-quote-pill">
+                        <span class="dash-quote-icon">🌱</span>
+                        <span class="dash-quote-text">“To plant a garden is to believe in tomorrow.”</span>
+                        <cite class="dash-quote-author">— Audrey Hepburn</cite>
+                    </div>
                 </div>
-
             </div>
 
-
-            <!-- Summary -->
-
+            <!-- Summary KPI Cards -->
             <div class="summary-grid">
-
-                <div class="summary-card" data-page="plants" style="cursor: pointer;">
-
-                    <div class="summary-icon green">
-                        🌱
-                    </div>
-
+                <div class="summary-card" data-page="plants" role="button" tabindex="0" title="View plant catalog">
+                    <div class="summary-icon green">🌱</div>
                     <div class="summary-info">
-                        <span>Total Plants</span>
-                        <strong id="statTotalPlants">4</strong>
+                        <span class="summary-label">Total Plants</span>
+                        <strong id="statTotalPlants" class="summary-value">4</strong>
+                        <span class="summary-hint">Catalog species →</span>
                     </div>
-
                 </div>
 
-
-                <div class="summary-card" data-page="stock" style="cursor: pointer;">
-
-                    <div class="summary-icon gold">
-                        ◇
-                    </div>
-
+                <div class="summary-card" data-page="stock" role="button" tabindex="0" title="Manage stock inventory">
+                    <div class="summary-icon emerald">🪴</div>
                     <div class="summary-info">
-                        <span>Available Stock</span>
-                        <strong id="statAvailableStock">200</strong>
+                        <span class="summary-label">Available Stock</span>
+                        <strong id="statAvailableStock" class="summary-value">200</strong>
+                        <span class="summary-hint">Units in nursery →</span>
                     </div>
-
                 </div>
 
-
-                <div class="summary-card" data-page="customers" style="cursor: pointer;">
-
-                    <div class="summary-icon blue">
-                        ♧
-                    </div>
-
+                <div class="summary-card" data-page="customers" role="button" tabindex="0" title="View registered customers">
+                    <div class="summary-icon blue">👥</div>
                     <div class="summary-info">
-                        <span>Total Customers</span>
-                        <strong id="statTotalCustomers">3</strong>
+                        <span class="summary-label">Total Customers</span>
+                        <strong id="statTotalCustomers" class="summary-value">3</strong>
+                        <span class="summary-hint">Registered buyers →</span>
                     </div>
-
                 </div>
 
-
-                <div class="summary-card" data-page="orders" style="cursor: pointer;">
-
-                    <div class="summary-icon orange">
-                        🛒
-                    </div>
-
+                <div class="summary-card" data-page="orders" role="button" tabindex="0" title="View customer orders">
+                    <div class="summary-icon orange">🛒</div>
                     <div class="summary-info">
-                        <span>Total Orders</span>
-                        <strong id="statTotalOrders">3</strong>
+                        <span class="summary-label">Total Orders</span>
+                        <strong id="statTotalOrders" class="summary-value">3</strong>
+                        <span class="summary-hint">Processed orders →</span>
                     </div>
-
                 </div>
-
             </div>
 
-
-            <!-- Modules -->
-
+            <!-- System Modules (Clean Quick Access Grid) -->
             <div class="section-heading">
-
                 <div>
-                    <span>MANAGEMENT</span>
-
+                    <span class="section-tag">QUICK ACCESS</span>
                     <h2>System Modules</h2>
-
-                    <p>
-                        Select a module to manage the nursery system.
-                    </p>
+                    <p>Direct navigation to primary management modules</p>
                 </div>
-
             </div>
-
 
             <div class="module-grid">
-
-
                 <div class="module-card" data-page="plants">
-
-                    <div class="module-top">
-
-                        <div class="module-icon green">
-                            🌱
+                    <div class="module-card-left">
+                        <div class="module-icon green">🌱</div>
+                        <div class="module-meta">
+                            <h3>Plant Management</h3>
+                            <p>Catalog details, pricing, and plant species.</p>
                         </div>
-
-                        <span class="module-number">
-                            01
-                        </span>
-
                     </div>
-
-                    <h3>Plant Management</h3>
-
-                    <p>
-                        Add, update and remove plant details and prices.
-                    </p>
-
-                    <button class="manage-btn">
-                        Manage
-                        <span>→</span>
-                    </button>
-
+                    <span class="module-arrow">→</span>
                 </div>
-
 
                 <div class="module-card" data-page="stock">
-
-                    <div class="module-top">
-
-                        <div class="module-icon green">
-                            ◇
+                    <div class="module-card-left">
+                        <div class="module-icon emerald">🪴</div>
+                        <div class="module-meta">
+                            <h3>Stock Management</h3>
+                            <p>Track quantities, adjustments, and reorder levels.</p>
                         </div>
-
-                        <span class="module-number">
-                            02
-                        </span>
-
                     </div>
-
-                    <h3>Stock Management</h3>
-
-                    <p>
-                        Track available plants and update stock quantities.
-                    </p>
-
-                    <button class="manage-btn">
-                        Manage
-                        <span>→</span>
-                    </button>
-
+                    <span class="module-arrow">→</span>
                 </div>
-
 
                 <div class="module-card" data-page="customers">
-
-                    <div class="module-top">
-
-                        <div class="module-icon blue">
-                            ♧
+                    <div class="module-card-left">
+                        <div class="module-icon blue">👥</div>
+                        <div class="module-meta">
+                            <h3>Customer Management</h3>
+                            <p>Customer contact profiles and purchase records.</p>
                         </div>
-
-                        <span class="module-number">
-                            03
-                        </span>
-
                     </div>
-
-                    <h3>Customer Management</h3>
-
-                    <p>
-                        Store and manage customer details and contact information.
-                    </p>
-
-                    <button class="manage-btn">
-                        Manage
-                        <span>→</span>
-                    </button>
-
+                    <span class="module-arrow">→</span>
                 </div>
-
 
                 <div class="module-card" data-page="orders">
-
-                    <div class="module-top">
-
-                        <div class="module-icon orange">
-                            🛒
+                    <div class="module-card-left">
+                        <div class="module-icon orange">🛒</div>
+                        <div class="module-meta">
+                            <h3>Order Management</h3>
+                            <p>Create, dispatch, and track customer orders.</p>
                         </div>
-
-                        <span class="module-number">
-                            04
-                        </span>
-
                     </div>
-
-                    <h3>Order Management</h3>
-
-                    <p>
-                        Create, view and update customer orders.
-                    </p>
-
-                    <button class="manage-btn">
-                        Manage
-                        <span>→</span>
-                    </button>
-
+                    <span class="module-arrow">→</span>
                 </div>
-
 
                 <div class="module-card" data-page="payments">
-
-                    <div class="module-top">
-
-                        <div class="module-icon gold">
-                            ₹
+                    <div class="module-card-left">
+                        <div class="module-icon gold">₹</div>
+                        <div class="module-meta">
+                            <h3>Payment Management</h3>
+                            <p>Payment records, settlements, and invoices.</p>
                         </div>
-
-                        <span class="module-number">
-                            05
-                        </span>
-
                     </div>
-
-                    <h3>Payment Management</h3>
-
-                    <p>
-                        Record payment details and payment status.
-                    </p>
-
-                    <button class="manage-btn">
-                        Manage
-                        <span>→</span>
-                    </button>
-
+                    <span class="module-arrow">→</span>
                 </div>
-
 
                 <div class="module-card" data-page="users">
-
-                    <div class="module-top">
-
-                        <div class="module-icon purple">
-                            ♙
+                    <div class="module-card-left">
+                        <div class="module-icon purple">👤</div>
+                        <div class="module-meta">
+                            <h3>User Management</h3>
+                            <p>Operator security controls for Varshini &amp; Sri.</p>
                         </div>
-
-                        <span class="module-number">
-                            06
-                        </span>
-
                     </div>
-
-                    <h3>User Management</h3>
-
-                    <p>
-                        Allow Varshini and Sri to manage the nursery system.
-                    </p>
-
-                    <button class="manage-btn">
-                        Manage
-                        <span>→</span>
-                    </button>
-
+                    <span class="module-arrow">→</span>
                 </div>
-
             </div>
 
-
-            <!-- Stock Table -->
-
+            <!-- Available Stock Overview Table -->
             <div class="data-card">
-
                 <div class="data-header">
-
                     <div>
-
-                        <span>STOCK MANAGEMENT</span>
-
+                        <span class="section-tag">INVENTORY SNAPSHOT</span>
                         <h2>Available Plant Stock</h2>
-
-                        <p>
-                            Current plant availability and prices.
-                        </p>
-
+                        <p>Current nursery inventory levels and pricing</p>
                     </div>
-
                     <button class="view-button" data-page="stock">
-                        View Stock
+                        View Full Stock
                         <span>→</span>
                     </button>
-
                 </div>
 
-
                 <div class="table-wrapper">
-
                     <table>
-
                         <thead>
-
                             <tr>
                                 <th>PLANT NAME</th>
                                 <th>PRICE</th>
                                 <th>AVAILABLE QUANTITY</th>
+                                <th>STOCK STATUS</th>
                             </tr>
-
                         </thead>
-
                         <tbody id="dashboardStockBody">
-
                             <tr>
                                 <td>
                                     <div class="plant-cell">
@@ -548,12 +382,10 @@
                                         <strong>Rose Plant</strong>
                                     </div>
                                 </td>
-                                <td>₹120</td>
-                                <td>
-                                    <span class="stock-number">45</span>
-                                </td>
+                                <td><strong>₹120.00</strong></td>
+                                <td><span class="stock-number">45</span></td>
+                                <td><span class="stock-badge ok">In Stock</span></td>
                             </tr>
-
                             <tr>
                                 <td>
                                     <div class="plant-cell">
@@ -561,12 +393,10 @@
                                         <strong>Aloe Vera</strong>
                                     </div>
                                 </td>
-                                <td>₹80</td>
-                                <td>
-                                    <span class="stock-number">62</span>
-                                </td>
+                                <td><strong>₹80.00</strong></td>
+                                <td><span class="stock-number">62</span></td>
+                                <td><span class="stock-badge ok">In Stock</span></td>
                             </tr>
-
                             <tr>
                                 <td>
                                     <div class="plant-cell">
@@ -574,12 +404,10 @@
                                         <strong>Jasmine Plant</strong>
                                     </div>
                                 </td>
-                                <td>₹100</td>
-                                <td>
-                                    <span class="stock-number">38</span>
-                                </td>
+                                <td><strong>₹100.00</strong></td>
+                                <td><span class="stock-number">38</span></td>
+                                <td><span class="stock-badge ok">In Stock</span></td>
                             </tr>
-
                             <tr>
                                 <td>
                                     <div class="plant-cell">
@@ -587,18 +415,13 @@
                                         <strong>Money Plant</strong>
                                     </div>
                                 </td>
-                                <td>₹90</td>
-                                <td>
-                                    <span class="stock-number">55</span>
-                                </td>
+                                <td><strong>₹90.00</strong></td>
+                                <td><span class="stock-number">55</span></td>
+                                <td><span class="stock-badge ok">In Stock</span></td>
                             </tr>
-
                         </tbody>
-
                     </table>
-
                 </div>
-
             </div>
 
         </section>

@@ -217,9 +217,20 @@ function renderDashboardStock(plants) {
     if (!tbody) return;
     tbody.innerHTML = '';
 
+    if (!plants || plants.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 24px; color: var(--muted);">No plant stock records found.</td></tr>`;
+        return;
+    }
+
     plants.forEach(plant => {
         const tr = document.createElement('tr');
         const icon = plant.icon || '🌱';
+        const qty = Number(plant.quantity) || 0;
+        const isLow = qty <= 10;
+        const statusBadge = isLow
+            ? `<span class="stock-badge low">Low Stock (${qty})</span>`
+            : `<span class="stock-badge ok">In Stock</span>`;
+
         tr.innerHTML = `
             <td>
                 <div class="plant-cell">
@@ -227,12 +238,30 @@ function renderDashboardStock(plants) {
                     <strong>${plant.name}</strong>
                 </div>
             </td>
-            <td>₹${Number(plant.price).toFixed(2)}</td>
+            <td><strong>₹${Number(plant.price).toFixed(2)}</strong></td>
             <td>
-                <span class="stock-number">${plant.quantity}</span>
+                <span class="stock-number">${qty}</span>
+            </td>
+            <td>
+                ${statusBadge}
             </td>
         `;
         tbody.appendChild(tr);
+    });
+}
+
+// Dashboard Quick Action Buttons
+const dashBtnAddPlant = document.getElementById('dashBtnAddPlant');
+if (dashBtnAddPlant) {
+    dashBtnAddPlant.addEventListener('click', () => {
+        openAddPlantModal();
+    });
+}
+
+const dashBtnNewOrder = document.getElementById('dashBtnNewOrder');
+if (dashBtnNewOrder) {
+    dashBtnNewOrder.addEventListener('click', () => {
+        openCreateOrderModal();
     });
 }
 
@@ -950,9 +979,9 @@ async function switchActiveUser(userName) {
     if (sidebarAvatar) sidebarAvatar.childNodes[0].nodeValue = initial + " ";
     if (sidebarName) sidebarName.textContent = userName;
 
-    // Update Hero Greeting
-    const heroName = document.querySelector(".hero-content h1");
-    if (heroName) heroName.textContent = userName;
+    // Update Dashboard Welcome Banner Name
+    const dashOperatorName = document.getElementById('dashOperatorName');
+    if (dashOperatorName) dashOperatorName.textContent = userName;
 
     // Inform API of User Auth Session
     try {

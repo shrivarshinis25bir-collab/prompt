@@ -1,9 +1,9 @@
 // ============================================================================
 // GreenLeaf Nursery Management System - Progressive Web App Service Worker
-// Cache version: v1.0.0
+// Cache version: v3.0.0
 // ============================================================================
 
-const CACHE_NAME = 'greenleaf-pwa-v1';
+const CACHE_NAME = 'greenleaf-pwa-v3';
 const DATA_CACHE_NAME = 'greenleaf-data-v1';
 
 // Core App Shell Assets for Pre-caching
